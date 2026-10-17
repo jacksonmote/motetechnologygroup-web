@@ -22,21 +22,23 @@ a{color:#0B5F59}a:hover{color:#083F3B}
 @media (max-width: 1000px){.svc-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
 @media (max-width: 560px){.svc-grid{grid-template-columns:minmax(0,1fr) !important}}
 html{scroll-behavior:smooth}
+@media (max-width: 1000px){.hero-tiles{display:none !important}}
+@media (max-width: 640px){.site-header{padding-top:16px !important;padding-bottom:8px !important;row-gap:4px !important}.nav-cta{display:none !important}}
 a:focus-visible{outline:3px solid #0B6E66;outline-offset:3px}
 </style>
 </head>
 <body><div style="min-height: 100vh; background: #F4F6F8; color: #0F1B2D; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
 
-<header style="max-width: 1160px; margin: 0 auto; padding: 24px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+<header class="site-header" style="max-width: 1160px; margin: 0 auto; padding: 24px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
 <a href="#top" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #0F1B2D">
 <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect x="1" y="1" width="34" height="34" rx="8" fill="#0F1B2D"></rect><circle cx="18" cy="18" r="5" fill="#0B6E66"></circle></svg>
 <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.01em">Mote Technology Group</span>
 </a>
 <nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
-<a href="#services" style="color: #33415A; text-decoration: none; font-weight: 500">Services</a>
-<a href="#approach" style="color: #33415A; text-decoration: none; font-weight: 500">Approach</a>
-<a href="#about" style="color: #33415A; text-decoration: none; font-weight: 500">About</a>
-<a href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: #0F1B2D; color: #FFFFFF; text-decoration: none; font-weight: 600">Connect on LinkedIn</a>
+<a href="#services" style="display: inline-flex; align-items: center; min-height: 44px; color: #33415A; text-decoration: none; font-weight: 500">Services</a>
+<a href="#approach" style="display: inline-flex; align-items: center; min-height: 44px; color: #33415A; text-decoration: none; font-weight: 500">Approach</a>
+<a href="#about" style="display: inline-flex; align-items: center; min-height: 44px; color: #33415A; text-decoration: none; font-weight: 500">About</a>
+<a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: #0F1B2D; color: #FFFFFF; text-decoration: none; font-weight: 600">Connect on LinkedIn</a>
 </nav>
 </header>
 
@@ -50,7 +52,7 @@ a:focus-visible{outline:3px solid #0B6E66;outline-offset:3px}
 <a href="#services" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 10px; border: 1.5px solid #0F1B2D; color: #0F1B2D; text-decoration: none; font-weight: 600; font-size: 17px">See services</a>
 </div>
 </div>
-<div style="flex: 1 1 320px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px" aria-hidden="true">
+<div class="hero-tiles" style="flex: 1 1 320px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px" aria-hidden="true">
 <div style="height: 140px; border-radius: 16px; background: #0F1B2D"></div>
 <div style="height: 140px; border-radius: 16px; background: #DCE3EA; display: flex; align-items: center; justify-content: center"><div style="width: 56px; height: 56px; border-radius: 50%; background: #0B6E66"></div></div>
 <div style="height: 140px; border-radius: 16px; background: #DCE3EA"></div>
