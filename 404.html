@@ -14,9 +14,11 @@
 body{margin:0;background:#F4F6F8}
 a{color:#0B5F59}a:hover{color:#083F3B}
 a:focus-visible{outline:3px solid #0B6E66;outline-offset:3px}
+.skip-link{position:absolute;left:16px;top:-80px;z-index:10;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#0F1B2D;color:#FFFFFF;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:600;text-decoration:none}
+.skip-link:focus{top:16px;color:#FFFFFF}
 </style>
 </head>
-<body><div style="min-height: 100vh; display: flex; flex-direction: column; background: #F4F6F8; color: #0F1B2D; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
+<body><a class="skip-link" href="#main">Skip to content</a><div style="min-height: 100vh; display: flex; flex-direction: column; background: #F4F6F8; color: #0F1B2D; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
 
 <header style="width: 100%; max-width: 1208px; margin: 0 auto; padding: 24px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
 <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #0F1B2D">
@@ -31,7 +33,7 @@ a:focus-visible{outline:3px solid #0B6E66;outline-offset:3px}
 </nav>
 </header>
 
-<main style="flex: 1 0 auto; width: 100%; max-width: 1208px; margin: 0 auto; padding: 72px 24px 96px; box-sizing: border-box">
+<main id="main" style="flex: 1 0 auto; width: 100%; max-width: 1208px; margin: 0 auto; padding: 72px 24px 96px; box-sizing: border-box">
 <p style="margin: 0 0 20px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #0B6E66">Error 404</p>
 <h1 style="margin: 0 0 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.025em">This page doesn't exist.</h1>
 <p style="margin: 0 0 36px; max-width: 600px; font-size: 20px; color: #33415A">The link may be out of date, or the address may have a typo. Everything on this site lives on the home page.</p>
