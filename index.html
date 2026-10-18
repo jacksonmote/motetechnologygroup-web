@@ -7,6 +7,7 @@
 <meta name="description" content="Product strategy, systems and workflow review, websites, automation and home technology setups from Jackson Mote, based in Lexington, Kentucky.">
 <link rel="canonical" href="https://motetechnologygroup.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mote Technology Group">
@@ -59,7 +60,9 @@ a{color:#8A4521}a:hover{color:#6A3418}
 @media (max-width: 1000px){.svc-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
 @media (max-width: 560px){.svc-grid{grid-template-columns:minmax(0,1fr) !important}}
 html{scroll-behavior:smooth}
-@media (max-width: 1000px){.hero-tiles{display:none !important}}
+.hero-net{flex:1 1 320px;min-width:0}
+@media (max-width: 999px){.hero-net{flex:0 0 240px !important}.hero-text{flex-basis:420px !important}}
+@media (max-width: 859px){.hero-net{display:none !important}}
 @media (max-width: 640px){.site-header{padding-top:16px !important;padding-bottom:8px !important;row-gap:4px !important}.nav-cta{display:none !important}}
 a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
@@ -70,9 +73,9 @@ a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 <body><a class="skip-link" href="#top">Skip to content</a><div style="min-height: 100vh; background: #F7F4F0; color: #0C1526; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
 
 <header class="site-header" style="max-width: 1160px; margin: 0 auto; padding: 24px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
-<a href="#top" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #0C1526">
-<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect x="1" y="1" width="34" height="34" rx="8" fill="#0C1526"></rect><circle cx="18" cy="18" r="5" fill="#9A4F26"></circle></svg>
-<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.01em">Mote Technology Group</span>
+<a href="#top" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: #0C1526">
+<img src="mote-mark.svg" width="40" height="40" alt="">
+<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em">Mote Technology Group</span>
 </a>
 <nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
 <a href="#services" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Services</a>
@@ -83,7 +86,7 @@ a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 </header>
 
 <section id="top" style="max-width: 1160px; margin: 0 auto; padding: 72px 24px 88px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
-<div style="flex: 999 1 560px; min-width: 0">
+<div class="hero-text" style="flex: 999 1 560px; min-width: 0">
 <p style="margin: 0 0 20px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #9A4F26">Technology consulting</p>
 <h1 style="margin: 0 0 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.025em">Practical technology help for teams that need to get it right.</h1>
 <p style="margin: 0 0 36px; max-width: 600px; font-size: 20px; color: #352F33">Product strategy, systems and workflow analysis, hands-on builds and home technology setups, from someone who has spent years turning complex requirements into software people actually use.</p>
@@ -92,11 +95,12 @@ a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 <a href="#services" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 10px; border: 1.5px solid #0C1526; color: #0C1526; text-decoration: none; font-weight: 600; font-size: 17px">See services</a>
 </div>
 </div>
-<div class="hero-tiles" style="flex: 1 1 320px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px" aria-hidden="true">
-<div style="height: 140px; border-radius: 16px; background: #0C1526"></div>
-<div style="height: 140px; border-radius: 16px; background: #E5DED5; display: flex; align-items: center; justify-content: center"><div style="width: 56px; height: 56px; border-radius: 50%; background: #9A4F26"></div></div>
-<div style="height: 140px; border-radius: 16px; background: #E5DED5"></div>
-<div style="height: 140px; border-radius: 16px; background: #0C1526; display: flex; align-items: flex-end; padding: 18px; box-sizing: border-box"><div style="width: 100%; height: 6px; border-radius: 3px; background: #9A4F26"></div></div>
+<div class="hero-net" aria-hidden="true">
+<svg viewBox="0 0 320 294" style="display: block; width: 100%; height: auto" aria-hidden="true" focusable="false">
+<g stroke="#0C1526" stroke-opacity="0.35" stroke-width="1.5" stroke-linecap="round" fill="none"><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="92" y2="126"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="48" y2="58"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="48" y1="58" x2="150" y2="30"/><line vector-effect="non-scaling-stroke" x1="150" y1="30" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="268" y1="70" x2="290" y2="170"/><line vector-effect="non-scaling-stroke" x1="290" y1="170" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="238" y1="256" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="122" y1="262" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="150" y2="30"/></g>
+<g fill="#0C1526"><circle cx="48" cy="58" r="7"/><circle cx="150" cy="30" r="7"/><circle cx="268" cy="70" r="7"/><circle cx="290" cy="170" r="7"/><circle cx="238" cy="256" r="7"/><circle cx="122" cy="262" r="7"/><circle cx="40" cy="184" r="7"/><circle cx="92" cy="126" r="7"/></g>
+<circle cx="160" cy="150" r="14" fill="#9A4F26"/>
+</svg>
 </div>
 </section>
 
