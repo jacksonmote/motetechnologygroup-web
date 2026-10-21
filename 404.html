@@ -19,6 +19,8 @@ a{color:#8A4521}a:hover{color:#6A3418}
 a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 .skip-link{position:absolute;left:16px;top:-80px;z-index:10;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#0C1526;color:#FFFFFF;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:600;text-decoration:none}
 .skip-link:focus{top:16px;color:#FFFFFF}
+@media (max-width: 640px){.site-nav{column-gap:14px !important;row-gap:0 !important;font-size:15px}}
+@media (max-width: 380px){.site-nav{column-gap:8px !important}}
 </style>
 </head>
 <body><a class="skip-link" href="#main">Skip to content</a><div style="min-height: 100vh; display: flex; flex-direction: column; background: #F7F4F0; color: #0C1526; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
@@ -28,9 +30,10 @@ a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
 <img src="/mote-mark.svg" width="40" height="40" alt="">
 <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em">Mote Technology Group</span>
 </a>
-<nav style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
-<a href="/#services" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Services</a>
-<a href="/#approach" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Approach</a>
+<nav class="site-nav" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+<a href="/home/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Home services</a>
+<a href="/business/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Business services</a>
+<a href="/faq/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">FAQ</a>
 <a href="/#about" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">About</a>
 <a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: #0C1526; color: #FFFFFF; text-decoration: none; font-weight: 600">Connect on LinkedIn</a>
 </nav>
