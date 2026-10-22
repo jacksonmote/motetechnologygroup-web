@@ -294,3 +294,36 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
     }
   }
 }
+
+/* Print: dark text on white with the logo and page content. Navigation,
+   buttons and decoration are dropped; the closing email button prints as
+   the address, and every FAQ answer prints expanded. */
+@media print {
+  @page { margin: 16mm; }
+  :root {
+    --space-section: 32px; --space-cta: 32px; --space-hero-top: 0px;
+    --space-header-top: 0px; --space-header-bottom: 16px;
+  }
+  body, .page, .section-white, .about, .band, .card, .note-card, .tile, .faq details { background: none; box-shadow: none; }
+  .card, .note-card, .tile, .band { border: 1px solid var(--border); }
+  .page { min-height: 0; }
+  .about { color: var(--text); }
+  .about-title { color: var(--ink); }
+  .about .eyebrow { color: var(--accent); }
+
+  .skip-link, .site-nav, .hero-net, .icon, .btn { display: none; }
+  .cta .btn-primary {
+    display: inline; min-height: 0; padding: 0; background: none; color: var(--ink);
+    font-size: 0; text-decoration: none;
+  }
+  .cta .btn-primary::after { content: attr(aria-label); font-size: 17px; }
+
+  .section-title, .faq-group-title, .cta-title,
+  .svc-grid, .card-grid, .band, .how-cols, .steps, .faq { animation: none; }
+
+  .faq details::details-content { content-visibility: visible; }
+  .faq summary::after { display: none; }
+
+  h1, h2, h3, .group-label, .eyebrow, .svc-note { break-after: avoid; }
+  .card, .note-card, .tile, .faq details, .step-list > div, .steps > div { break-inside: avoid; }
+}
