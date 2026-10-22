@@ -267,3 +267,18 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   text-decoration-color: var(--accent-on-dark); text-underline-offset: 4px;
 }
 .footer-email:hover { text-decoration-color: var(--accent); }
+
+/* Scroll fade-ins: section headings and card groups fade and rise as they
+   enter the viewport. Only where scroll-driven animations are supported and
+   motion is welcome; the hero is never animated. */
+@keyframes fade-rise { from { opacity: 0; transform: translateY(12px); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-title, .faq-group-title, .cta-title,
+    .svc-grid, .card-grid, .band, .how-cols, .steps, .faq {
+      animation: fade-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 160px;
+    }
+  }
+}
