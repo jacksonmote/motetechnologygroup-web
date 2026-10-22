@@ -95,6 +95,8 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body { margin: 0; background: var(--page); }
+/* Avoid a lone word on the last line of a paragraph (no effect where unsupported) */
+p, li { text-wrap: pretty; }
 a { color: var(--link); transition: color var(--ease), text-decoration-color var(--ease); }
 a:hover { color: var(--link-hover); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
