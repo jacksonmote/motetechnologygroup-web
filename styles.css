@@ -150,6 +150,7 @@ a:hover { color: var(--link-hover); }
   text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 8px;
 }
 .nav-link:hover { color: var(--heading); text-decoration-color: var(--accent-soft); }
+.nav-short { display: none; }
 .site-nav a[aria-current="page"] {
   color: var(--heading); text-decoration: underline; text-decoration-color: var(--accent);
   text-decoration-thickness: 2px; text-underline-offset: 8px;
@@ -165,9 +166,9 @@ a:hover { color: var(--link-hover); }
   .site-header { row-gap: 4px; }
   .nav-cta { display: none; }
   .site-nav { column-gap: 14px; row-gap: 0; font-size: 15px; }
+  .nav-long { display: none; }
+  .nav-short { display: inline; }
 }
-@media (max-width: 380px) { .site-nav { column-gap: 8px; font-size: 14px; } }
-@media (max-width: 359px) { .site-nav { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 20px; } }
 
 /* Hero */
 .hero { max-width: var(--content-width); margin: 0 auto; padding: var(--space-hero-top) var(--gutter) var(--space-section); }
@@ -187,6 +188,13 @@ a:hover { color: var(--link-hover); }
 .net-edges { stroke: var(--heading); }
 .net-nodes { fill: var(--heading); }
 .net-hub { fill: var(--accent); }
+/* Hero motion: pulses travel along three edges into the hub (SVG animateMotion)
+   and a soft ring grows and fades around it. Both are off for reduced motion. */
+.net-pulses { fill: var(--accent); }
+.net-glow { fill: none; stroke: var(--accent); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+@keyframes net-glow { from { opacity: 0.35; transform: scale(1); } to { opacity: 0; transform: scale(2.1); } }
+@media (prefers-reduced-motion: no-preference) { .net-glow { animation: net-glow 3.6s ease-out infinite; } }
+@media (prefers-reduced-motion: reduce) { .net-pulses { display: none; } }
 @media (max-width: 999px) {
   .hero-net { flex: 0 0 240px; }
   .hero-text { flex-basis: 420px; }
@@ -218,7 +226,7 @@ a:hover { color: var(--link-hover); }
 .btn-outline:hover { background: var(--band); }
 .more-row { margin: 16px 0 0; }
 .more-link {
-  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600;
+  display: inline-block; box-sizing: border-box; min-height: 44px; padding: 8px 0; font-weight: 600;
   text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 4px;
 }
 .more-link:hover { text-decoration-color: currentColor; }
@@ -244,6 +252,7 @@ a:hover { color: var(--link-hover); }
 .tp strong { font-weight: 600; }
 ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .svc-note { margin: -8px 0 16px; }
+.svc-after { margin: 16px 0 0; }
 
 /* Bands */
 .band { padding: 36px; border-radius: var(--radius-lg); background: var(--band); display: flex; flex-wrap: wrap; gap: 32px; }
@@ -254,7 +263,11 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .band-title { margin: 0; font-family: var(--font-heading); font-size: var(--step-h3-lg); }
 .band-text { max-width: 460px; }
 .tile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.tile { padding: 16px 18px; border-radius: var(--radius-md); background: var(--tile); font-weight: 600; font-size: 16px; }
+@media (max-width: 560px) { .tile-grid { grid-template-columns: minmax(0, 1fr); } }
+.tile {
+  display: flex; align-items: center; padding: 16px 18px; border-radius: var(--radius-md);
+  background: var(--tile); font-weight: 600; font-size: 16px; line-height: 1.4;
+}
 .band-area { flex: 1 1 100%; margin: 0; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text); font-size: 16px; }
 .band .more-row { flex: 1 1 100%; margin: -16px 0 0; }
 .box-title { margin: 0 0 12px; font-family: var(--font-heading); font-size: var(--step-h3-lg); line-height: 1.2; }
