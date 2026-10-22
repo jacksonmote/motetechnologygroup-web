@@ -188,6 +188,13 @@ a:hover { color: var(--link-hover); }
 .net-edges { stroke: var(--heading); }
 .net-nodes { fill: var(--heading); }
 .net-hub { fill: var(--accent); }
+/* Hero motion: pulses travel along three edges into the hub (SVG animateMotion)
+   and a soft ring grows and fades around it. Both are off for reduced motion. */
+.net-pulses { fill: var(--accent); }
+.net-glow { fill: none; stroke: var(--accent); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+@keyframes net-glow { from { opacity: 0.35; transform: scale(1); } to { opacity: 0; transform: scale(2.1); } }
+@media (prefers-reduced-motion: no-preference) { .net-glow { animation: net-glow 3.6s ease-out infinite; } }
+@media (prefers-reduced-motion: reduce) { .net-pulses { display: none; } }
 @media (max-width: 999px) {
   .hero-net { flex: 0 0 240px; }
   .hero-text { flex-basis: 420px; }
