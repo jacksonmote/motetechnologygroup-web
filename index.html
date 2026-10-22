@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -60,202 +61,179 @@
   ]
 }
 </script>
-<style>
-body{margin:0;background:#F7F4F0}
-a{color:#8A4521}a:hover{color:#6A3418}
-@media (max-width: 1000px){.svc-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
-@media (max-width: 560px){.svc-grid{grid-template-columns:minmax(0,1fr) !important}}
-html{scroll-behavior:smooth}
-.hero-net{flex:1 1 320px;min-width:0}
-@media (max-width: 999px){.hero-net{flex:0 0 240px !important}.hero-text{flex-basis:420px !important}}
-@media (max-width: 859px){.hero-net{display:none !important}}
-@media (max-width: 640px){.site-header{padding-top:16px !important;padding-bottom:8px !important;row-gap:4px !important}.nav-cta{display:none !important}#top{padding-top:24px !important}}
-a:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-.tp{margin:0;color:#5A5059;font-size:14px;line-height:1.5}.tp strong{font-weight:600}
-.how-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
-@media (max-width: 640px){.how-cols{grid-template-columns:minmax(0,1fr);gap:40px}}
-.skip-link{position:absolute;left:16px;top:-80px;z-index:10;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#0C1526;color:#FFFFFF;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:600;text-decoration:none}
-.skip-link:focus{top:16px;color:#FFFFFF}
-.site-nav a[aria-current="page"]{color:#0C1526 !important;text-decoration:underline !important;text-decoration-color:#9A4F26 !important;text-decoration-thickness:2px !important;text-underline-offset:8px}
-@media (max-width: 640px){.site-nav{column-gap:14px !important;row-gap:0 !important;font-size:15px}}
-@media (max-width: 380px){.site-nav{column-gap:8px !important;font-size:14px}}
-@media (max-width: 359px){.site-nav{display:grid !important;grid-template-columns:auto auto;justify-content:start;column-gap:20px !important}}
-.more-link{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-weight:600;text-decoration:none}.more-link:hover{text-decoration:underline}
-</style>
 </head>
-<body><a class="skip-link" href="#top">Skip to content</a><div style="min-height: 100vh; background: #F7F4F0; color: #0C1526; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
+<body><a class="skip-link" href="#top">Skip to content</a><div class="page">
 
-<header class="site-header" style="max-width: 1160px; margin: 0 auto; padding: 24px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
-<a href="/" style="display: flex; align-items: center; gap: 14px; min-height: 44px; text-decoration: none; color: #0C1526">
+<header class="site-header">
+<a class="brand" href="/">
 <img src="mote-mark.svg" width="40" height="40" alt="">
-<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em">Mote Technology Group</span>
+<span class="brand-name">Mote Technology Group</span>
 </a>
-<nav class="site-nav" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
-<a href="/home/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Home services</a>
-<a href="/business/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Business services</a>
-<a href="/faq/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">FAQ</a>
-<a href="/#about" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">About</a>
-<a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: #0C1526; color: #FFFFFF; text-decoration: none; font-weight: 600">Connect on LinkedIn</a>
+<nav class="site-nav">
+<a class="nav-link" href="/home/">Home services</a>
+<a class="nav-link" href="/business/">Business services</a>
+<a class="nav-link" href="/faq/">FAQ</a>
+<a class="nav-link" href="/#about">About</a>
+<a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/">Connect on LinkedIn</a>
 </nav>
 </header>
 
-<section id="top" style="max-width: 1160px; margin: 0 auto; padding: 40px 24px 88px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
-<div class="hero-text" style="flex: 999 1 560px; min-width: 0">
-<p style="margin: 0 0 20px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #9A4F26">Technology consulting and implementation · Lexington, KY</p>
-<h1 style="margin: 0 0 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.025em">Technology that works, for small businesses and homes.</h1>
-<p style="margin: 0 0 36px; max-width: 600px; font-size: 20px; color: #352F33">Product and systems help for growing teams, plus Wi-Fi, networking and smart-home setup around Lexington. Clear advice, honest scope, and work that's explained, not just installed.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 16px">
-<a href="mailto:hello@motetechnologygroup.com?subject=Project%20inquiry" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 10px; background: #9A4F26; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 17px">Start a conversation</a>
-<a href="#services" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 10px; border: 1.5px solid #0C1526; color: #0C1526; text-decoration: none; font-weight: 600; font-size: 17px">See services</a>
+<section class="hero hero-split" id="top">
+<div class="hero-text">
+<p class="eyebrow">Technology consulting and implementation · Lexington, KY</p>
+<h1 class="hero-title">Technology that works, for small businesses and homes.</h1>
+<p class="lead">Product and systems help for growing teams, plus Wi-Fi, networking and smart-home setup around Lexington. Clear advice, honest scope, and work that's explained, not just installed.</p>
+<div class="btn-row">
+<a class="btn btn-primary" href="mailto:hello@motetechnologygroup.com?subject=Project%20inquiry">Start a conversation</a>
+<a class="btn btn-outline" href="#services">See services</a>
 </div>
 </div>
 <div class="hero-net" aria-hidden="true">
-<svg viewBox="0 0 320 294" style="display: block; width: 100%; height: auto" aria-hidden="true" focusable="false">
-<g stroke="#0C1526" stroke-opacity="0.35" stroke-width="1.5" stroke-linecap="round" fill="none"><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="92" y2="126"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="48" y2="58"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="48" y1="58" x2="150" y2="30"/><line vector-effect="non-scaling-stroke" x1="150" y1="30" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="268" y1="70" x2="290" y2="170"/><line vector-effect="non-scaling-stroke" x1="290" y1="170" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="238" y1="256" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="122" y1="262" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="150" y2="30"/></g>
-<g fill="#0C1526"><circle cx="48" cy="58" r="7"/><circle cx="150" cy="30" r="7"/><circle cx="268" cy="70" r="7"/><circle cx="290" cy="170" r="7"/><circle cx="238" cy="256" r="7"/><circle cx="122" cy="262" r="7"/><circle cx="40" cy="184" r="7"/><circle cx="92" cy="126" r="7"/></g>
-<circle cx="160" cy="150" r="14" fill="#9A4F26"/>
+<svg viewBox="0 0 320 294" aria-hidden="true" focusable="false">
+<g class="net-edges" stroke-opacity="0.35" stroke-width="1.5" stroke-linecap="round" fill="none"><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="92" y2="126"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="48" y2="58"/><line vector-effect="non-scaling-stroke" x1="92" y1="126" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="48" y1="58" x2="150" y2="30"/><line vector-effect="non-scaling-stroke" x1="150" y1="30" x2="268" y2="70"/><line vector-effect="non-scaling-stroke" x1="268" y1="70" x2="290" y2="170"/><line vector-effect="non-scaling-stroke" x1="290" y1="170" x2="238" y2="256"/><line vector-effect="non-scaling-stroke" x1="238" y1="256" x2="122" y2="262"/><line vector-effect="non-scaling-stroke" x1="122" y1="262" x2="40" y2="184"/><line vector-effect="non-scaling-stroke" x1="160" y1="150" x2="150" y2="30"/></g>
+<g class="net-nodes"><circle cx="48" cy="58" r="7"/><circle cx="150" cy="30" r="7"/><circle cx="268" cy="70" r="7"/><circle cx="290" cy="170" r="7"/><circle cx="238" cy="256" r="7"/><circle cx="122" cy="262" r="7"/><circle cx="40" cy="184" r="7"/><circle cx="92" cy="126" r="7"/></g>
+<circle class="net-hub" cx="160" cy="150" r="14"/>
 </svg>
 </div>
 </section>
 
-<section id="services" style="background: #FFFFFF; border-top: 1px solid #E5DED5; border-bottom: 1px solid #E5DED5">
-<div style="max-width: 1160px; margin: 0 auto; padding: 88px 24px">
-<h2 style="margin: 0 0 12px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1.15">What I can help with</h2>
-<p style="margin: 0 0 48px; max-width: 620px; color: #352F33">Two kinds of help: business work in person or remote, and in-home setup around Lexington.</p>
-<p style="margin: 0 0 16px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #5A5059">For businesses</p>
-<p class="tp" style="margin: -8px 0 16px">In person around Lexington, or remote anywhere in the US.</p>
-<div class="svc-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+<section class="section-white" id="services">
+<div class="section">
+<h2 class="section-title section-title-tight">What I can help with</h2>
+<p class="section-intro">Two kinds of help: business work in person or remote, and in-home setup around Lexington.</p>
+<p class="group-label">For businesses</p>
+<p class="svc-note tp">In person around Lexington, or remote anywhere in the US.</p>
+<div class="svc-grid">
 
-<div style="padding: 28px; border-radius: 14px; background: #F7F4F0; display: flex; flex-direction: column; gap: 12px">
-<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A4F26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg>
-<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Product strategy</h3>
-<p style="margin: 0; color: #352F33; font-size: 16px">Roadmaps, requirements and prioritization that tie what you build to what the business needs.</p>
+<div class="card">
+<svg class="icon" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg>
+<h3 class="card-title">Product strategy</h3>
+<p class="card-text">Roadmaps, requirements and prioritization that tie what you build to what the business needs.</p>
 <p class="tp"><strong>Typical projects:</strong> turning a backlog of requests into a prioritized roadmap, writing requirements a developer can build from, sanity-checking a new product idea.</p>
 </div>
 
-<div style="padding: 28px; border-radius: 14px; background: #F7F4F0; display: flex; flex-direction: column; gap: 12px">
-<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A4F26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><path d="M10 6.5h4a3 3 0 0 1 3 3V14"></path></svg>
-<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Systems &amp; workflow review</h3>
-<p style="margin: 0; color: #352F33; font-size: 16px">A clear-eyed look at how your tools and processes fit together, and where the friction is.</p>
+<div class="card">
+<svg class="icon" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><path d="M10 6.5h4a3 3 0 0 1 3 3V14"></path></svg>
+<h3 class="card-title">Systems &amp; workflow review</h3>
+<p class="card-text">A clear-eyed look at how your tools and processes fit together, and where the friction is.</p>
 <p class="tp"><strong>Typical projects:</strong> finding where data gets re-typed between tools, choosing the right software for a growing team, cleaning up a messy process before automating it.</p>
 </div>
 
-<div style="padding: 28px; border-radius: 14px; background: #F7F4F0; display: flex; flex-direction: column; gap: 12px">
-<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A4F26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M3 8h18M8 21h8"></path></svg>
-<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Websites &amp; small-business tech</h3>
-<p style="margin: 0; color: #352F33; font-size: 16px">Modern, fast websites and the everyday setup behind them: domains, email and hosting.</p>
+<div class="card">
+<svg class="icon" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M3 8h18M8 21h8"></path></svg>
+<h3 class="card-title">Websites &amp; small-business tech</h3>
+<p class="card-text">Modern, fast websites and the everyday setup behind them: domains, email and hosting.</p>
 <p class="tp"><strong>Typical projects:</strong> replacing a dated website, setting up business email and domains properly, getting off a pricey site builder.</p>
 </div>
 
-<div style="padding: 28px; border-radius: 14px; background: #F7F4F0; display: flex; flex-direction: column; gap: 12px">
-<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A4F26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"></path><circle cx="12" cy="12" r="3.5"></circle></svg>
-<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Automation &amp; AI tooling</h3>
-<p style="margin: 0; color: #352F33; font-size: 16px">Practical automation and AI-assisted tools that remove repetitive work without adding risk.</p>
+<div class="card">
+<svg class="icon" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"></path><circle cx="12" cy="12" r="3.5"></circle></svg>
+<h3 class="card-title">Automation &amp; AI tooling</h3>
+<p class="card-text">Practical automation and AI-assisted tools that remove repetitive work without adding risk.</p>
 <p class="tp"><strong>Typical projects:</strong> automating a repetitive report or handoff, connecting tools so updates flow on their own, using AI assistants safely with business data.</p>
 </div>
 
 </div>
-<p style="margin: 16px 0 0"><a class="more-link" href="/business/">Learn more about business services <span aria-hidden="true">→</span></a></p>
+<p class="more-row"><a class="more-link" href="/business/">Learn more about business services <span aria-hidden="true">→</span></a></p>
 
-<p style="margin: 48px 0 16px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #5A5059">For homes</p>
-<div style="padding: 36px; border-radius: 14px; background: #F3E9DF; display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
-<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
-<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A4F26" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M9.5 15.5a3.5 3.5 0 0 1 5 0M8 13.5a6 6 0 0 1 8 0"></path><circle cx="12" cy="17.5" r="0.6" fill="#9A4F26"></circle></svg>
-<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">Home technology</h3>
-<p style="margin: 0; color: #352F33; font-size: 16px; max-width: 460px">Reliable Wi-Fi, a well-organized home network and smart-home devices that actually work together. Everything is set up securely and explained so you can manage it.</p>
+<p class="group-label group-label-spaced">For homes</p>
+<div class="band band-services">
+<div class="band-col band-main">
+<svg class="icon" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M9.5 15.5a3.5 3.5 0 0 1 5 0M8 13.5a6 6 0 0 1 8 0"></path><circle cx="12" cy="17.5" r="0.6" class="icon-dot"></circle></svg>
+<h3 class="band-title">Home technology</h3>
+<p class="card-text band-text">Reliable Wi-Fi, a well-organized home network and smart-home devices that actually work together. Everything is set up securely and explained so you can manage it.</p>
 <p class="tp"><strong>Typical projects:</strong> fixing Wi-Fi dead zones, setting up a new home's network, getting smart devices onto one app, a separate network for guests and smart devices.</p>
 </div>
-<div style="flex: 1 1 360px; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-<div style="padding: 16px 18px; border-radius: 10px; background: #FFFFFF; font-weight: 600; font-size: 16px">Wi-Fi &amp; mesh coverage</div>
-<div style="padding: 16px 18px; border-radius: 10px; background: #FFFFFF; font-weight: 600; font-size: 16px">Home network setup</div>
-<div style="padding: 16px 18px; border-radius: 10px; background: #FFFFFF; font-weight: 600; font-size: 16px">Smart-home &amp; IoT devices</div>
-<div style="padding: 16px 18px; border-radius: 10px; background: #FFFFFF; font-weight: 600; font-size: 16px">Home automation</div>
+<div class="band-col tile-grid">
+<div class="tile">Wi-Fi &amp; mesh coverage</div>
+<div class="tile">Home network setup</div>
+<div class="tile">Smart-home &amp; IoT devices</div>
+<div class="tile">Home automation</div>
 </div>
-<p style="flex: 1 1 100%; margin: 0; padding-top: 24px; border-top: 1px solid #E5DED5; color: #352F33; font-size: 16px">Serving Lexington and surrounding Bluegrass communities. Remote assistance available.</p>
-<p style="flex: 1 1 100%; margin: -16px 0 0"><a class="more-link" href="/home/">Learn more about home services <span aria-hidden="true">→</span></a></p>
+<p class="band-area">Serving Lexington and surrounding Bluegrass communities. Remote assistance available.</p>
+<p class="more-row"><a class="more-link" href="/home/">Learn more about home services <span aria-hidden="true">→</span></a></p>
 </div>
 
 </div>
 </section>
 
-<section id="approach" style="max-width: 1160px; margin: 0 auto; padding: 88px 24px">
-<h2 style="margin: 0 0 48px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1.15">How it works</h2>
+<section class="section" id="approach">
+<h2 class="section-title">How it works</h2>
 <div class="how-cols">
 <div>
-<p style="margin: 0 0 24px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #5A5059">For businesses</p>
-<div style="display: flex; flex-direction: column; gap: 32px">
+<p class="group-label">For businesses</p>
+<div class="step-list">
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">01</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Talk it through</h3>
-<p style="margin: 0; color: #352F33">A short call to understand the problem, your constraints and what success looks like.</p>
+<p class="step-num">01</p>
+<h3 class="step-title">Talk it through</h3>
+<p class="step-text">A short call to understand the problem, your constraints and what success looks like.</p>
 </div>
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">02</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Scope it clearly</h3>
-<p style="margin: 0; color: #352F33">A written proposal with deliverables, timeline and price, so there are no surprises.</p>
+<p class="step-num">02</p>
+<h3 class="step-title">Scope it clearly</h3>
+<p class="step-text">A written proposal with deliverables, timeline and price, so there are no surprises.</p>
 </div>
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">03</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Deliver and hand off</h3>
-<p style="margin: 0; color: #352F33">Regular check-ins, then documentation your team can run with after the work is done.</p>
+<p class="step-num">03</p>
+<h3 class="step-title">Deliver and hand off</h3>
+<p class="step-text">Regular check-ins, then documentation your team can run with after the work is done.</p>
 </div>
 </div>
 </div>
 <div>
-<p style="margin: 0 0 24px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #5A5059">For homes</p>
-<div style="display: flex; flex-direction: column; gap: 32px">
+<p class="group-label">For homes</p>
+<div class="step-list">
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">01</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Quick call</h3>
-<p style="margin: 0; color: #352F33">Tell me what's not working and what you'd like to have.</p>
+<p class="step-num">01</p>
+<h3 class="step-title">Quick call</h3>
+<p class="step-text">Tell me what's not working and what you'd like to have.</p>
 </div>
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">02</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Flat quote</h3>
-<p style="margin: 0; color: #352F33">A clear price before any work starts. No hourly surprises.</p>
+<p class="step-num">02</p>
+<h3 class="step-title">Flat quote</h3>
+<p class="step-text">A clear price before any work starts. No hourly surprises.</p>
 </div>
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">03</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">One visit</h3>
-<p style="margin: 0; color: #352F33">Setup, testing and cleanup, usually in a single trip.</p>
+<p class="step-num">03</p>
+<h3 class="step-title">One visit</h3>
+<p class="step-text">Setup, testing and cleanup, usually in a single trip.</p>
 </div>
 <div>
-<p style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 40px; color: #9A4F26; line-height: 1">04</p>
-<h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 21px">Walkthrough</h3>
-<p style="margin: 0; color: #352F33">I show you how it works and leave simple notes, so you're not stuck calling someone later.</p>
+<p class="step-num">04</p>
+<h3 class="step-title">Walkthrough</h3>
+<p class="step-text">I show you how it works and leave simple notes, so you're not stuck calling someone later.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 
-<section id="about" style="background: #0C1526; color: #EEE8E0">
-<div style="max-width: 1160px; margin: 0 auto; padding: 88px 24px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
-<img src="headshot.jpg" alt="Jackson Mote" width="200" height="200" loading="lazy" style="flex: 0 0 auto; width: 200px; height: 200px; border-radius: 20px; object-fit: cover">
-<div style="flex: 999 1 480px; min-width: 0">
-<p style="margin: 0 0 12px; font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #E0A878">About</p>
-<h2 style="margin: 0 0 20px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1.15; color: #FFFFFF">Hi, I'm Jackson Mote.</h2>
-<p style="margin: 0 0 16px; max-width: 680px">I've spent 10 years in product management and technology, working across complex systems, data and detailed requirements. My focus has always been translating messy, high-stakes problems into products and setups that work.</p>
-<p style="margin: 0; max-width: 680px">Mote Technology Group is how I bring that experience to a wider range of teams, from early-stage companies and small businesses to households that want their technology to just work.</p>
+<section class="about" id="about">
+<div class="section about-inner">
+<img class="headshot" src="headshot.jpg" alt="Jackson Mote" width="200" height="200" loading="lazy">
+<div class="about-text">
+<p class="eyebrow">About</p>
+<h2 class="section-title about-title">Hi, I'm Jackson Mote.</h2>
+<p class="about-copy">I've spent 10 years in product management and technology, working across complex systems, data and detailed requirements. My focus has always been translating messy, high-stakes problems into products and setups that work.</p>
+<p class="about-copy">Mote Technology Group is how I bring that experience to a wider range of teams, from early-stage companies and small businesses to households that want their technology to just work.</p>
 </div>
 </div>
 </section>
 
-<section style="max-width: 1160px; margin: 0 auto; padding: 96px 24px; text-align: center">
-<h2 style="margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.02em; line-height: 1.15">Have a project in mind?</h2>
-<p style="margin: 0 auto 32px; max-width: 520px; color: #352F33">Send me an email or a message on LinkedIn and let's see if it's a fit.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
-<a aria-label="Email hello@motetechnologygroup.com" href="mailto:hello@motetechnologygroup.com?subject=Project%20inquiry" style="display: inline-flex; align-items: center; min-height: 52px; padding: 8px 28px; box-sizing: border-box; max-width: 100%; text-align: center; border-radius: 10px; background: #9A4F26; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 17px">Email me</a>
-<a href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 10px; border: 1.5px solid #0C1526; color: #0C1526; text-decoration: none; font-weight: 600; font-size: 17px">Connect on LinkedIn</a>
+<section class="cta">
+<h2 class="cta-title">Have a project in mind?</h2>
+<p class="cta-text">Send me an email or a message on LinkedIn and let's see if it's a fit.</p>
+<div class="btn-row btn-row-center">
+<a class="btn btn-lg btn-wrap btn-primary" aria-label="Email hello@motetechnologygroup.com" href="mailto:hello@motetechnologygroup.com?subject=Project%20inquiry">Email me</a>
+<a class="btn btn-lg btn-outline" href="https://www.linkedin.com/in/jacksonmote/">Connect on LinkedIn</a>
 </div>
 </section>
 
-<footer style="border-top: 1px solid #E5DED5">
-<div style="max-width: 1160px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; color: #5A5059; font-size: 14px">
+<footer class="site-footer">
+<div class="footer-inner">
 <span>© 2026 Mote Technology Group</span>
 <span>Based in Lexington, Kentucky</span>
-<a href="mailto:hello@motetechnologygroup.com" style="display: inline-flex; align-items: center; min-height: 44px; color: #9A4F26; font-weight: 600">hello@motetechnologygroup.com</a>
+<a class="footer-email" href="mailto:hello@motetechnologygroup.com">hello@motetechnologygroup.com</a>
 </div>
 </footer>
 
