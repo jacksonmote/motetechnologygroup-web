@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -109,55 +110,33 @@
   ]
 }
 </script>
-<style>
-body{margin:0;background:#F7F4F0}
-a{color:#8A4521}a:hover{color:#6A3418}
-html{scroll-behavior:smooth}
-@media (max-width: 640px){.site-header{padding-top:16px !important;padding-bottom:8px !important;row-gap:4px !important}.nav-cta{display:none !important}#top{padding-top:24px !important}}
-a:focus-visible,summary:focus-visible{outline:3px solid #9A4F26;outline-offset:3px}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-.skip-link{position:absolute;left:16px;top:-80px;z-index:10;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:8px;background:#0C1526;color:#FFFFFF;font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:600;text-decoration:none}
-.skip-link:focus{top:16px;color:#FFFFFF}
-.site-nav a[aria-current="page"]{color:#0C1526 !important;text-decoration:underline !important;text-decoration-color:#9A4F26 !important;text-decoration-thickness:2px !important;text-underline-offset:8px}
-@media (max-width: 640px){.site-nav{column-gap:14px !important;row-gap:0 !important;font-size:15px}}
-@media (max-width: 380px){.site-nav{column-gap:8px !important;font-size:14px}}
-@media (max-width: 359px){.site-nav{display:grid !important;grid-template-columns:auto auto;justify-content:start;column-gap:20px !important}}
-.faq-group{width:100%;max-width:760px;margin:0 auto}
-.faq{display:flex;flex-direction:column;gap:12px}
-.faq details{border-radius:14px;background:#FFFFFF;border:1px solid #E5DED5}
-.faq summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding:14px 24px;border-radius:14px;cursor:pointer;list-style:none;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;line-height:1.35}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";content:"+" / "";flex:0 0 auto;color:#9A4F26;font-size:28px;font-weight:500;line-height:1}
-.faq details[open] summary::after{content:"\2212";content:"\2212" / ""}
-.faq details p{margin:0;padding:0 24px 22px;color:#352F33;font-size:16px}
-</style>
 </head>
-<body><a class="skip-link" href="#top">Skip to content</a><div style="min-height: 100vh; background: #F7F4F0; color: #0C1526; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.6">
+<body><a class="skip-link" href="#top">Skip to content</a><div class="page">
 
-<header class="site-header" style="max-width: 1160px; margin: 0 auto; padding: 24px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
-<a href="/" style="display: flex; align-items: center; gap: 14px; min-height: 44px; text-decoration: none; color: #0C1526">
+<header class="site-header">
+<a class="brand" href="/">
 <img src="/mote-mark.svg" width="40" height="40" alt="">
-<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em">Mote Technology Group</span>
+<span class="brand-name">Mote Technology Group</span>
 </a>
-<nav class="site-nav" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
-<a href="/home/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Home services</a>
-<a href="/business/" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">Business services</a>
-<a href="/faq/" aria-current="page" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">FAQ</a>
-<a href="/#about" style="display: inline-flex; align-items: center; min-height: 44px; color: #352F33; text-decoration: none; font-weight: 500">About</a>
-<a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: #0C1526; color: #FFFFFF; text-decoration: none; font-weight: 600">Connect on LinkedIn</a>
+<nav class="site-nav">
+<a class="nav-link" href="/home/">Home services</a>
+<a class="nav-link" href="/business/">Business services</a>
+<a class="nav-link" href="/faq/" aria-current="page">FAQ</a>
+<a class="nav-link" href="/#about">About</a>
+<a class="nav-cta" href="https://www.linkedin.com/in/jacksonmote/">Connect on LinkedIn</a>
 </nav>
 </header>
 
-<section id="top" style="max-width: 1160px; margin: 0 auto; padding: 40px 24px 56px">
-<h1 style="margin: 0 0 24px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.025em">Frequently asked questions</h1>
-<p style="margin: 0; max-width: 600px; font-size: 20px; color: #352F33">Can't find what you're looking for? <a href="mailto:hello@motetechnologygroup.com?subject=Question" style="font-weight: 600">Just ask</a>.</p>
+<section class="hero hero-compact" id="top">
+<h1 class="hero-title">Frequently asked questions</h1>
+<p class="lead">Can't find what you're looking for? <a class="strong-link" href="mailto:hello@motetechnologygroup.com?subject=Question">Just ask</a>.</p>
 </section>
 
-<section style="background: #FFFFFF; border-top: 1px solid #E5DED5; border-bottom: 1px solid #E5DED5">
-<div style="max-width: 1160px; margin: 0 auto; padding: 72px 24px 88px; display: flex; flex-direction: column; gap: 56px">
+<section class="section-white">
+<div class="section faq-list">
 
 <div class="faq-group">
-<h2 style="margin: 0 0 20px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -0.02em; line-height: 1.15">General</h2>
+<h2 class="faq-group-title">General</h2>
 <div class="faq">
 <details>
 <summary>What areas do you serve?</summary>
@@ -183,7 +162,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #9A4F26;outline-offset:3
 </div>
 
 <div class="faq-group">
-<h2 style="margin: 0 0 20px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -0.02em; line-height: 1.15">Home services</h2>
+<h2 class="faq-group-title">Home services</h2>
 <div class="faq">
 <details>
 <summary>How does pricing work?</summary>
@@ -213,7 +192,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #9A4F26;outline-offset:3
 </div>
 
 <div class="faq-group">
-<h2 style="margin: 0 0 20px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -0.02em; line-height: 1.15">Business services</h2>
+<h2 class="faq-group-title">Business services</h2>
 <div class="faq">
 <details>
 <summary>What size businesses do you work with?</summary>
@@ -237,20 +216,20 @@ a:focus-visible,summary:focus-visible{outline:3px solid #9A4F26;outline-offset:3
 </div>
 </section>
 
-<section style="max-width: 1160px; margin: 0 auto; padding: 96px 24px; text-align: center">
-<h2 style="margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.02em; line-height: 1.15">Have a project in mind?</h2>
-<p style="margin: 0 auto 32px; max-width: 520px; color: #352F33">Send me an email or a message on LinkedIn and let's see if it's a fit.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
-<a aria-label="Email hello@motetechnologygroup.com" href="mailto:hello@motetechnologygroup.com?subject=Question" style="display: inline-flex; align-items: center; min-height: 52px; padding: 8px 28px; box-sizing: border-box; max-width: 100%; text-align: center; border-radius: 10px; background: #9A4F26; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 17px">Email me</a>
-<a href="https://www.linkedin.com/in/jacksonmote/" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 10px; border: 1.5px solid #0C1526; color: #0C1526; text-decoration: none; font-weight: 600; font-size: 17px">Connect on LinkedIn</a>
+<section class="cta">
+<h2 class="cta-title">Have a project in mind?</h2>
+<p class="cta-text">Send me an email or a message on LinkedIn and let's see if it's a fit.</p>
+<div class="btn-row btn-row-center">
+<a class="btn btn-lg btn-wrap btn-primary" aria-label="Email hello@motetechnologygroup.com" href="mailto:hello@motetechnologygroup.com?subject=Question">Email me</a>
+<a class="btn btn-lg btn-outline" href="https://www.linkedin.com/in/jacksonmote/">Connect on LinkedIn</a>
 </div>
 </section>
 
-<footer style="border-top: 1px solid #E5DED5">
-<div style="max-width: 1160px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; color: #5A5059; font-size: 14px">
+<footer class="site-footer">
+<div class="footer-inner">
 <span>© 2026 Mote Technology Group</span>
 <span>Based in Lexington, Kentucky</span>
-<a href="mailto:hello@motetechnologygroup.com" style="display: inline-flex; align-items: center; min-height: 44px; color: #9A4F26; font-weight: 600">hello@motetechnologygroup.com</a>
+<a class="footer-email" href="mailto:hello@motetechnologygroup.com">hello@motetechnologygroup.com</a>
 </div>
 </footer>
 
