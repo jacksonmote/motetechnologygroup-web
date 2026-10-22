@@ -150,6 +150,7 @@ a:hover { color: var(--link-hover); }
   text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 8px;
 }
 .nav-link:hover { color: var(--heading); text-decoration-color: var(--accent-soft); }
+.nav-short { display: none; }
 .site-nav a[aria-current="page"] {
   color: var(--heading); text-decoration: underline; text-decoration-color: var(--accent);
   text-decoration-thickness: 2px; text-underline-offset: 8px;
@@ -165,9 +166,9 @@ a:hover { color: var(--link-hover); }
   .site-header { row-gap: 4px; }
   .nav-cta { display: none; }
   .site-nav { column-gap: 14px; row-gap: 0; font-size: 15px; }
+  .nav-long { display: none; }
+  .nav-short { display: inline; }
 }
-@media (max-width: 380px) { .site-nav { column-gap: 8px; font-size: 14px; } }
-@media (max-width: 359px) { .site-nav { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 20px; } }
 
 /* Hero */
 .hero { max-width: var(--content-width); margin: 0 auto; padding: var(--space-hero-top) var(--gutter) var(--space-section); }
