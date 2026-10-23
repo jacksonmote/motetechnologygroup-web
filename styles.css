@@ -321,6 +321,7 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 /* About (dark) */
 .about { background: var(--about-bg); color: var(--on-dark); }
 .about-inner { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+.about-inner picture { display: flex; flex: 0 0 auto; } /* flex, not inline, so no line box adds space under the img */
 .headshot { flex: 0 0 auto; width: 200px; height: 200px; border-radius: var(--radius-xl); object-fit: cover; }
 .about-text { flex: 999 1 480px; min-width: 0; }
 .about .eyebrow { margin-bottom: 12px; color: var(--accent-on-dark); }
