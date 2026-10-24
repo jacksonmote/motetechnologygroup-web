@@ -34,6 +34,58 @@ jobs:
       #   <!doctype html> the pages use is equally valid HTML; style only.
       - name: Validate HTML
         run: npx --yes html-validate@11.17.0 --config .github/htmlvalidate.json $(git ls-files '*.html')
+      # Cache-busting: every page must link the stylesheet as /styles.css?v=N
+      # with the same N everywhere. On pull requests, if styles.css differs from
+      # the base branch, N must be higher than the base branch's N, so returning
+      # visitors get the new CSS instead of a cached copy. (N may never go down.)
+      # The base branch is fetched read-only; no credentials are needed.
+      - name: Stylesheet version
+        if: success() || failure()
+        run: |
+          if [ -n "$GITHUB_BASE_REF" ]; then
+            git fetch --quiet --depth=1 origin "$GITHUB_BASE_REF"
+          fi
+          python3 - <<'PY'
+          import os, re, subprocess, sys
+
+          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html"]
+          LINK = re.compile(r'<link\b[^>]*\bhref="([^"]*styles\.css[^"]*)"')
+          VERSIONED = re.compile(r"/styles\.css\?v=(\d+)")
+
+          def versions(read):
+              found, errors = {}, []
+              for page in PAGES:
+                  hrefs = LINK.findall(read(page))
+                  if len(hrefs) != 1:
+                      errors.append(f"{page}: expected one styles.css link, found {len(hrefs)}")
+                      continue
+                  m = VERSIONED.fullmatch(hrefs[0])
+                  if not m:
+                      errors.append(f'{page}: links "{hrefs[0]}", expected "/styles.css?v=N"')
+                      continue
+                  found[page] = int(m.group(1))
+              return found, errors
+
+          found, errors = versions(lambda p: open(p, encoding="utf-8").read())
+          if len(set(found.values())) > 1:
+              errors.append("pages use different versions: " + ", ".join(f"{p} v={n}" for p, n in found.items()))
+          if errors:
+              sys.exit("\n".join(errors))
+          version = next(iter(found.values()))
+          print(f"All {len(PAGES)} pages link /styles.css?v={version}")
+
+          if os.environ.get("GITHUB_BASE_REF"):
+              def show(path):
+                  r = subprocess.run(["git", "show", f"FETCH_HEAD:{path}"], capture_output=True, text=True)
+                  return r.stdout if r.returncode == 0 else ""
+              base = max(versions(show)[0].values(), default=0)
+              css_changed = subprocess.run(["git", "diff", "--quiet", "FETCH_HEAD", "--", "styles.css"]).returncode != 0
+              print(f"Base branch: v={base}; styles.css changed: {'yes' if css_changed else 'no'}")
+              if version < base:
+                  sys.exit(f"Version went down from v={base} to v={version}")
+              if css_changed and version <= base:
+                  sys.exit(f"styles.css changed but the version is still v={version}. Bump ?v= to {base + 1} on all {len(PAGES)} pages.")
+          PY
 
   links:
     name: Links
