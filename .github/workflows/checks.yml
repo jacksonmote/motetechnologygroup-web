@@ -86,6 +86,61 @@ jobs:
               if css_changed and version <= base:
                   sys.exit(f"styles.css changed but the version is still v={version}. Bump ?v= to {base + 1} on all {len(PAGES)} pages.")
           PY
+      # Web app manifest: site.webmanifest is valid JSON with the expected
+      # fields, its description matches the home page's meta description, every
+      # page links it, and every icon exists as a PNG whose real size (read from
+      # the IHDR header) matches its "sizes" entry.
+      - name: Manifest
+        if: success() || failure()
+        run: |
+          python3 - <<'PY'
+          import html, json, os, re, struct, sys
+
+          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html"]
+          EXPECTED = {
+              "name": "Mote Technology Group", "short_name": "Mote Tech", "id": "/", "start_url": "/",
+              "scope": "/", "display": "browser", "lang": "en",
+              "background_color": "#F7F4F0", "theme_color": "#0C1526",
+          }
+          errors = []
+          try:
+              manifest = json.load(open("site.webmanifest", encoding="utf-8"))
+          except (OSError, ValueError) as e:
+              sys.exit(f"site.webmanifest: {e}")
+
+          for key, value in EXPECTED.items():
+              if manifest.get(key) != value:
+                  errors.append(f'"{key}" is {manifest.get(key)!r}, expected {value!r}')
+          home = re.search(r'<meta name="description" content="([^"]*)">', open("index.html", encoding="utf-8").read())
+          if not manifest.get("description") or not home or manifest["description"] != html.unescape(home.group(1)):
+              errors.append('"description" must match the home page meta description')
+          for page in PAGES:
+              if '<link rel="manifest" href="/site.webmanifest">' not in open(page, encoding="utf-8").read():
+                  errors.append(f"{page}: missing <link rel=\"manifest\" href=\"/site.webmanifest\">")
+
+          icons = manifest.get("icons") or []
+          if not icons:
+              errors.append('"icons" is missing or empty')
+          for icon in icons:
+              src, sizes = icon.get("src", ""), icon.get("sizes", "")
+              if icon.get("type") != "image/png" or icon.get("purpose") not in ("any", "maskable"):
+                  errors.append(f"{src or icon}: needs \"type\": \"image/png\" and a \"purpose\" of any or maskable")
+              path = src.lstrip("/")
+              if not src.startswith("/") or not os.path.isfile(path):
+                  errors.append(f"{src}: file not found")
+                  continue
+              head = open(path, "rb").read(24)
+              if head[:8] != b"\x89PNG\r\n\x1a\n" or head[12:16] != b"IHDR":
+                  errors.append(f"{src}: not a PNG")
+                  continue
+              width, height = struct.unpack(">II", head[16:24])
+              if sizes != f"{width}x{height}":
+                  errors.append(f'{src}: "sizes" is "{sizes}" but the image is {width}x{height}')
+
+          if errors:
+              sys.exit("\n".join(errors))
+          print(f"site.webmanifest OK: {len(icons)} icons, linked from all {len(PAGES)} pages")
+          PY
 
   links:
     name: Links
