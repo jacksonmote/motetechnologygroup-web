@@ -1,0 +1,32 @@
+{
+  "name": "Mote Technology Group",
+  "short_name": "Mote Tech",
+  "description": "Technology that works, for small businesses and homes. Product, workflow, website and office tech help in person around Lexington or remotely anywhere in the US, plus Wi-Fi, networking and smart-home setup for homes in Lexington, Kentucky.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "lang": "en",
+  "background_color": "#F7F4F0",
+  "theme_color": "#0C1526",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ]
+}
