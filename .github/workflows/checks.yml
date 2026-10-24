@@ -1,0 +1,129 @@
+name: Checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run still in progress.
+concurrency:
+  group: checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.22.1
+
+jobs:
+  html:
+    name: HTML
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # .github/htmlvalidate.json extends html-validate:recommended. JSON allows
+      # no comments, so the rules turned off there are explained here:
+      # - doctype-style: wants <!DOCTYPE html> in uppercase. The lowercase
+      #   <!doctype html> the pages use is equally valid HTML; style only.
+      - name: Validate HTML
+        run: npx --yes html-validate@11.17.0 --config .github/htmlvalidate.json $(git ls-files '*.html')
+
+  links:
+    name: Links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Offline: internal pages, assets and #fragments, resolved against the
+      # repo root. /faq/ style links resolve to the folder's index.html.
+      - name: Check internal links and anchors
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          lycheeVersion: v0.24.2
+          args: >-
+            --offline --include-fragments --index-files index.html
+            --root-dir ${{ github.workspace }} --no-progress
+            './**/*.html'
+      # Online, http(s) only, so mailto: links are skipped. Sites like LinkedIn
+      # often block bots (LinkedIn answers 999), so a failure here only warns.
+      - name: Check external links (warning only)
+        id: external
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          lycheeVersion: v0.24.2
+          args: >-
+            --scheme https --scheme http
+            --root-dir ${{ github.workspace }} --no-progress --max-retries 2
+            './**/*.html'
+      - name: Warn about external link failures
+        if: steps.external.outcome == 'failure'
+        run: echo "::warning title=External links::Some external links failed. Sites like LinkedIn often block bots; see the previous step's log."
+
+  accessibility:
+    name: Accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Start local server
+        run: |
+          python3 -m http.server 8000 > /dev/null 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:8000/ > /dev/null && exit 0; sleep 0.5; done
+          echo "Server did not start"; exit 1
+      # .github/pa11y.json: axe runner at WCAG 2.1 AA (pa11y's WCAG2AA maps to
+      # axe's wcag2a, wcag21a, wcag2aa, wcag21aa and best-practice tags), each
+      # page at 1280px and 390px. Chrome args:
+      # - --no-sandbox: Ubuntu runners block Chrome's sandbox.
+      # - --force-prefers-reduced-motion: the scroll fade-ins start at opacity 0,
+      #   so without it axe measures text mid-fade and reports false contrast
+      #   failures. Reduced motion shows every element in its final state.
+      # - --blink-settings=preferredColorScheme=1: light mode, so results don't
+      #   depend on the machine's theme.
+      # hideElements excludes only the decorative aria-hidden "→" in the
+      # "Learn more" links: axe can't measure a lone arrow ("nonBmp", needs
+      # review) and pa11y counts that as an error. The arrow uses the link
+      # color, and the link text next to it is still checked.
+      - name: Run pa11y-ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: |
+          export PUPPETEER_EXECUTABLE_PATH="$(command -v google-chrome)"
+          npx --yes pa11y-ci@5.0.0 --config .github/pa11y.json
+
+  requests:
+    name: No outside requests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Start local server
+        run: |
+          python3 -m http.server 8000 > /dev/null 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:8000/ > /dev/null && exit 0; sleep 0.5; done
+          echo "Server did not start"; exit 1
+      # Installed next to the script (not committed) so its import resolves.
+      # The script uses the runner's Google Chrome, so no browser download.
+      - name: Install Playwright
+        run: npm install --no-save --no-package-lock --no-audit --no-fund --prefix .github/scripts playwright@1.64.1
+      - name: Load every page and check requests and console
+        run: node .github/scripts/no-external-requests.mjs http://localhost:8000/
