@@ -1,0 +1,28 @@
+{
+  "defaults": {
+    "runners": ["axe"],
+    "standard": "WCAG2AA",
+    "timeout": 60000,
+    "hideElements": ".more-link > span[aria-hidden=\"true\"]",
+    "chromeLaunchConfig": {
+      "args": [
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--force-prefers-reduced-motion",
+        "--blink-settings=preferredColorScheme=0"
+      ]
+    }
+  },
+  "urls": [
+    { "url": "http://localhost:8000/", "viewport": { "width": 1280, "height": 900 } },
+    { "url": "http://localhost:8000/", "viewport": { "width": 390, "height": 844, "isMobile": true } },
+    { "url": "http://localhost:8000/home/", "viewport": { "width": 1280, "height": 900 } },
+    { "url": "http://localhost:8000/home/", "viewport": { "width": 390, "height": 844, "isMobile": true } },
+    { "url": "http://localhost:8000/business/", "viewport": { "width": 1280, "height": 900 } },
+    { "url": "http://localhost:8000/business/", "viewport": { "width": 390, "height": 844, "isMobile": true } },
+    { "url": "http://localhost:8000/faq/", "viewport": { "width": 1280, "height": 900 } },
+    { "url": "http://localhost:8000/faq/", "viewport": { "width": 390, "height": 844, "isMobile": true } },
+    { "url": "http://localhost:8000/404.html", "viewport": { "width": 1280, "height": 900 } },
+    { "url": "http://localhost:8000/404.html", "viewport": { "width": 390, "height": 844, "isMobile": true } }
+  ]
+}

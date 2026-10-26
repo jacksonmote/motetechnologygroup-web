@@ -211,6 +211,17 @@ jobs:
         run: |
           export PUPPETEER_EXECUTABLE_PATH="$(command -v google-chrome)"
           npx --yes pa11y-ci@5.0.0 --config .github/pa11y.json
+      # .github/pa11y-dark.json is the same config with
+      # --blink-settings=preferredColorScheme=0 (dark mode). It keeps
+      # --force-prefers-reduced-motion for the same reason as above. The
+      # first run's failure must not skip this one, hence the condition.
+      - name: Run pa11y-ci (dark mode)
+        if: success() || failure()
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: |
+          export PUPPETEER_EXECUTABLE_PATH="$(command -v google-chrome)"
+          npx --yes pa11y-ci@5.0.0 --config .github/pa11y-dark.json
 
   requests:
     name: No outside requests
