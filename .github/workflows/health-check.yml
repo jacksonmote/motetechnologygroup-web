@@ -1,0 +1,101 @@
+name: Health check
+
+# Weekly check of the live site, the domains and DNS. This is not a pull request
+# check, so the protect-main ruleset does not involve it. It opens a GitHub issue
+# when something needs attention and closes that issue when everything passes.
+on:
+  schedule:
+    # Sundays at 23:17 UTC (7:17 PM Eastern in summer, 6:17 PM in winter).
+    - cron: "17 23 * * 0"
+  workflow_dispatch:
+    inputs:
+      cert_warn_days:
+        description: "Test only: warn when the certificate has fewer than this many days left (blank = default 21)"
+        required: false
+        default: ""
+      cert_fail_days:
+        description: "Test only: fail when the certificate has fewer than this many days left (blank = default 14)"
+        required: false
+        default: ""
+
+# No permissions by default; the job asks for exactly what it needs.
+permissions: {}
+
+# Never run two health checks at once, and let a running one finish.
+concurrency:
+  group: health-check
+  cancel-in-progress: false
+
+jobs:
+  health:
+    name: Health check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # check out the repo (index.html is compared with the live site)
+      issues: write # open, comment on and close the health-check issue, and create its label
+      pages: read # read the GitHub Pages HTTPS settings through the API
+    env:
+      # The built-in token, no secrets. gh reads it; GH_REPO tells gh which repo to use.
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Runs the checks. The script writes a Markdown table to the job summary and
+      # to a report file, and sets fail_count and warn_count as step outputs. Its
+      # exit code is 0 (all pass), 1 (a failure) or 2 (warnings only); it is saved
+      # as an output instead of stopping the job, so the report step still runs.
+      - name: Run checks
+        id: check
+        env:
+          HC_REPORT: ${{ runner.temp }}/health-report.md
+          HC_CERT_WARN_DAYS: ${{ inputs.cert_warn_days }}
+          HC_CERT_FAIL_DAYS: ${{ inputs.cert_fail_days }}
+        run: |
+          code=0
+          python3 .github/scripts/health_check.py || code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+
+      # Opens, updates or closes the one open issue labeled health-check.
+      - name: Update the health-check issue
+        if: always() && steps.check.outputs.exit_code != ''
+        env:
+          REPORT: ${{ runner.temp }}/health-report.md
+          FAILS: ${{ steps.check.outputs.fail_count }}
+          WARNS: ${{ steps.check.outputs.warn_count }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TMP: ${{ runner.temp }}
+        run: |
+          # The label is created if missing; --force makes this safe to repeat.
+          gh label create health-check --force \
+            --description "Weekly health check found something to review" --color D93F0B
+          existing=$(gh issue list --label health-check --state open --json number --jq '.[0].number // empty')
+          count=$((FAILS + WARNS))
+
+          if [ "$count" -gt 0 ]; then
+            {
+              echo "Run: $RUN_URL"
+              echo
+              cat "$REPORT"
+            } > "$TMP/issue-body.md"
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body-file "$TMP/issue-body.md"
+            else
+              gh issue create --label health-check \
+                --title "Health check: $count item(s) need attention" \
+                --body-file "$TMP/issue-body.md"
+            fi
+          elif [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "All checks passing. Run: $RUN_URL"
+          fi
+
+      # Makes the run show red in the Actions tab when any check failed.
+      # Warnings alone leave the run green but still open an issue.
+      - name: Fail the run on a failed check
+        if: always() && steps.check.outputs.exit_code != '0' && steps.check.outputs.exit_code != '2'
+        run: |
+          echo "At least one health check failed, or the script crashed. See the job summary."
+          exit 1
