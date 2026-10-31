@@ -12,7 +12,7 @@ Source for the website at https://motetechnologygroup.com: technology help for s
 ## Quality checks
 
 - Every pull request runs HTML validation, link checking, accessibility tests (WCAG 2 AA, in light and dark mode) and a check that nothing loads from outside the site.
-- A weekly health check confirms the live site is up, the certificate and domain registrations are not close to expiring, and the DNS records are as expected. It opens an issue if something needs attention.
+- A weekly health check confirms the live site is up, the certificate and domain registrations are not close to expiring, the DNS and email-authentication records are as expected, the security policy meta tags are unchanged on every page, and the pinned CI tools are not far behind their latest releases. It opens an issue if something needs attention.
 - Lighthouse scores 100 for performance, best practices and SEO on mobile and desktop (October 2026).
 - Accessibility scores 100 on most pages. One page scores 95 because Lighthouse measures a scroll fade-in mid-animation.
 
