@@ -53,7 +53,7 @@ WWW_HOST = "www." + HOST
 SECURITY_TXT_FILE = env("HC_SECURITY_TXT_FILE", "")  # HC_SECURITY_TXT_FILE (read instead of live file)
 SECTXT_FAIL_DAYS = env_int("HC_SECTXT_FAIL_DAYS", 30)  # HC_SECTXT_FAIL_DAYS
 SECTXT_WARN_DAYS = env_int("HC_SECTXT_WARN_DAYS", 60)  # HC_SECTXT_WARN_DAYS
-DOMAINS = env("HC_DOMAINS", "motetechnologygroup.com,jacksonmote.com").split(",")  # HC_DOMAINS
+DOMAINS = env("HC_DOMAINS", "motetechnologygroup.com,jacksonmote.com,motejackson.com").split(",")  # HC_DOMAINS
 RDAP_URL = env("HC_RDAP_URL", "https://rdap.verisign.com/com/v1/domain/")  # HC_RDAP_URL
 DOMAIN_FAIL_DAYS = env_int("HC_DOMAIN_FAIL_DAYS", 30)  # HC_DOMAIN_FAIL_DAYS
 DOMAIN_WARN_DAYS = env_int("HC_DOMAIN_WARN_DAYS", 60)  # HC_DOMAIN_WARN_DAYS
@@ -63,6 +63,8 @@ DOH_SERVERS = [
     ("https://dns.google/resolve", {}),
     ("https://cloudflare-dns.com/dns-query", {"accept": "application/dns-json"}),
 ]
+WORKFLOW_FILE = env("HC_WORKFLOW_FILE", ".github/workflows/checks.yml")  # HC_WORKFLOW_FILE (where the CI tool versions are pinned)
+PATCH_GRACE_DAYS = env_int("HC_PATCH_GRACE_DAYS", 14)  # HC_PATCH_GRACE_DAYS (Node patch releases get this long before a warning)
 USER_AGENT = "Mozilla/5.0 (compatible; mote-health-check; +" + SITE + ")"
 TIMEOUT = 20
 
@@ -169,6 +171,9 @@ def check_pages_settings():
     out.append(("Pages HTTPS setting", PASS if enforced else FAIL, "Enforce HTTPS is on" if enforced else "Enforce HTTPS is off"))
     state = (data.get("https_certificate") or {}).get("state")
     out.append(("Pages certificate state", PASS if state == "approved" else WARN, f"Certificate state is {state}"))
+    verified = data.get("protected_domain_state")
+    out.append(("Pages domain verified", PASS if verified == "verified" else WARN,
+                "Custom domain is verified on the GitHub account" if verified == "verified" else f"Domain verification state is {verified}"))
     return out
 
 
@@ -269,10 +274,112 @@ def check_dns():
     spf = [txt_value(d) for d in answers(HOST, "TXT", 16) if txt_value(d).startswith("v=spf1")]
     out.append(("DNS: SPF", PASS if spf else FAIL, "SPF record present" if spf else "No SPF TXT record on the apex"))
     dmarc = [txt_value(d) for d in answers("_dmarc." + HOST, "TXT", 16) if txt_value(d).startswith("v=DMARC1")]
-    out.append(("DNS: DMARC", PASS if dmarc else FAIL, "DMARC record present" if dmarc else "No DMARC record at _dmarc"))
+    if not dmarc:
+        out.append(("DNS: DMARC", FAIL, "No DMARC record at _dmarc"))
+    else:
+        tags = dict(t.strip().split("=", 1) for t in dmarc[0].split(";") if "=" in t)
+        policy = tags.get("p", "").lower()
+        if policy not in ("quarantine", "reject"):
+            out.append(("DNS: DMARC", WARN, f"DMARC policy is p={policy or 'missing'}, expected quarantine or reject"))
+        elif not tags.get("rua"):
+            out.append(("DNS: DMARC", WARN, f"DMARC policy is p={policy} but no rua reporting address is set"))
+        else:
+            out.append(("DNS: DMARC", PASS, f"DMARC policy is p={policy} with reports to {tags['rua']}"))
     cname = [d.rstrip(".").lower() for d in answers(WWW_HOST, "CNAME", 5)]
     out.append(("DNS: www CNAME", PASS if cname == [WWW_TARGET] else FAIL,
                 f"www points to {cname[0]}" if cname else "www has no CNAME record"))
+    return out
+
+
+def check_security_meta():
+    """Every page must carry exactly one CSP and one referrer meta tag, identical across pages."""
+    csp_re = re.compile(r'<meta http-equiv="Content-Security-Policy" content="([^"]*)"', re.I)
+    ref_re = re.compile(r'<meta name="referrer" content="([^"]*)"', re.I)
+    pages = {path: page(path)[1] for path in PAGES}
+    pages[MISSING_PATH] = page(MISSING_PATH)[1]  # the 404 page
+    csps = {p: csp_re.findall(t) for p, t in pages.items()}
+    refs = {p: ref_re.findall(t) for p, t in pages.items()}
+    bad = [p for p in pages if len(csps[p]) != 1 or len(refs[p]) != 1]
+    if bad:
+        return ("Security meta tags", FAIL, "Not exactly one CSP and one referrer tag on: " + ", ".join(bad))
+    if len({csps[p][0] for p in pages}) > 1 or len({refs[p][0] for p in pages}) > 1:
+        return ("Security meta tags", FAIL, "The CSP or referrer tag differs between pages")
+    csp = csps[PAGES[0]][0]
+    if "unsafe-" in csp or "*" in csp or "script-src" in csp:
+        return ("Security meta tags", FAIL, "The CSP was loosened (unsafe-, wildcard or script-src): " + csp)
+    return ("Security meta tags", PASS, f"Same CSP and referrer tag on all {len(pages)} pages")
+
+
+def check_personal_domains():
+    """The other domains must forward to the main site over HTTPS only, with no plain-HTTP hop."""
+    out = []
+    for domain in (d for d in DOMAINS if d != HOST):
+        name = f"Forwarding: {domain}"
+        url, hops, plain = f"https://{domain}/", [], False
+        for _ in range(5):
+            status, headers, _ = http(url, follow=False)
+            location = headers.get("Location", "") if headers else ""
+            if status not in (301, 302, 307, 308) or not location:
+                break
+            url = urllib.parse.urljoin(url, location)
+            hops.append(url)
+            plain = plain or url.startswith("http://")
+        final = urllib.parse.urlparse(url)
+        if final.scheme != "https" or final.hostname != HOST:
+            out.append((name, FAIL, f"Ends at {url}, expected https://{HOST}"))
+        elif plain:
+            out.append((name, WARN, "Redirect chain passes through plain HTTP: " + " -> ".join(hops)))
+        else:
+            out.append((name, PASS, f"Forwards to {url} over HTTPS only"))
+    return out
+
+
+def version_tuple(text):
+    return tuple(int(n) for n in re.findall(r"\d+", text)[:3])
+
+
+def check_tool_versions():
+    """Dependabot cannot see tools pinned inside workflow text, so compare them with the latest releases.
+
+    A newer major or minor release warns. A newer patch release warns for Node
+    only (it ships security fixes), and only after a grace period.
+    """
+    with open(WORKFLOW_FILE, encoding="utf-8") as f:
+        workflow = f.read()
+    node = re.search(r"NODE_VERSION:\s*(\d+\.\d+\.\d+)", workflow)
+    lychee = re.search(r"lycheeVersion:\s*v(\d+\.\d+\.\d+)", workflow)
+    npm_tools = {}
+    for tool in ("html-validate", "pa11y-ci", "playwright"):
+        m = re.search(re.escape(tool) + r"@(\d+\.\d+\.\d+)", workflow)
+        npm_tools[tool] = m.group(1) if m else None
+
+    def judge(name, pinned, latest, patch_warns=False, age_days=0):
+        if pinned is None:
+            return (f"Tool: {name}", WARN, f"Could not find the pinned version in {WORKFLOW_FILE}")
+        p, l = version_tuple(pinned), version_tuple(latest)
+        if l <= p:
+            return (f"Tool: {name}", PASS, f"{pinned} is the latest")
+        if l[:2] != p[:2]:
+            return (f"Tool: {name}", WARN, f"Pinned {pinned}, latest is {latest}")
+        if patch_warns and age_days >= PATCH_GRACE_DAYS:
+            return (f"Tool: {name}", WARN, f"Pinned {pinned}, patch {latest} has been out {age_days} days")
+        return (f"Tool: {name}", PASS, f"{pinned} (patch {latest} available)")
+
+    out = []
+    major = node.group(1).split(".")[0] if node else None
+    _, _, body = http("https://nodejs.org/dist/index.json")
+    releases = [r for r in json.loads(body) if r["version"].startswith(f"v{major}.")]
+    latest = releases[0]
+    age = (datetime.now(timezone.utc) - datetime.fromisoformat(latest["date"] + "T00:00:00+00:00")).days
+    out.append(judge("Node", node.group(1) if node else None, latest["version"].lstrip("v"), True, age))
+    for tool, pinned in npm_tools.items():
+        _, _, body = http(f"https://registry.npmjs.org/{tool}/latest")
+        out.append(judge(tool, pinned, json.loads(body)["version"]))
+    gh_headers = {"accept": "application/vnd.github+json"}
+    if os.environ.get("GH_TOKEN"):  # the workflow's token avoids the shared-runner rate limit
+        gh_headers["authorization"] = "Bearer " + os.environ["GH_TOKEN"]
+    _, _, body = http("https://api.github.com/repos/lycheeverse/lychee/releases/latest", headers=gh_headers)
+    out.append(judge("lychee", lychee.group(1) if lychee else None, json.loads(body)["tag_name"].split("-v")[-1]))
     return out
 
 
@@ -320,6 +427,9 @@ def main():
         ("Certificate", check_certificate),
         ("Pages settings", check_pages_settings),
         ("Redirects", check_redirects),
+        ("Security meta", check_security_meta),
+        ("Forwarding", check_personal_domains),
+        ("Tool versions", check_tool_versions),
         ("security.txt", check_security_txt),
         *[(f"Domain {d}", lambda d=d: check_domain(d)) for d in DOMAINS],
         ("DNS", check_dns),
