@@ -65,4 +65,4 @@ Copy
 - Bring your branch up to date with `main` before pushing. One PR per change.
 - Required checks, by exact job name: `HTML`, `Links`, `Accessibility`, `No outside requests`. All four must pass before merge.
 - When several branches are open, they often touch the same `<head>` lines or `styles.css` rules. Trial-merge them on a throwaway branch before pushing and say which order to merge in.
-- The repo owner merges. After a merge, pull `main` and delete the branch locally and on GitHub.
+- The repo owner merges. After a merge, pull `main` and delete the branch locally. GitHub deletes the remote branch automatically; confirm with `git fetch --prune`.
