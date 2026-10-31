@@ -169,6 +169,9 @@ def check_pages_settings():
     out.append(("Pages HTTPS setting", PASS if enforced else FAIL, "Enforce HTTPS is on" if enforced else "Enforce HTTPS is off"))
     state = (data.get("https_certificate") or {}).get("state")
     out.append(("Pages certificate state", PASS if state == "approved" else WARN, f"Certificate state is {state}"))
+    verified = data.get("protected_domain_state")
+    out.append(("Pages domain verified", PASS if verified == "verified" else WARN,
+                "Custom domain is verified on the GitHub account" if verified == "verified" else f"Domain verification state is {verified}"))
     return out
 
 
@@ -269,10 +272,63 @@ def check_dns():
     spf = [txt_value(d) for d in answers(HOST, "TXT", 16) if txt_value(d).startswith("v=spf1")]
     out.append(("DNS: SPF", PASS if spf else FAIL, "SPF record present" if spf else "No SPF TXT record on the apex"))
     dmarc = [txt_value(d) for d in answers("_dmarc." + HOST, "TXT", 16) if txt_value(d).startswith("v=DMARC1")]
-    out.append(("DNS: DMARC", PASS if dmarc else FAIL, "DMARC record present" if dmarc else "No DMARC record at _dmarc"))
+    if not dmarc:
+        out.append(("DNS: DMARC", FAIL, "No DMARC record at _dmarc"))
+    else:
+        tags = dict(t.strip().split("=", 1) for t in dmarc[0].split(";") if "=" in t)
+        policy = tags.get("p", "").lower()
+        if policy not in ("quarantine", "reject"):
+            out.append(("DNS: DMARC", WARN, f"DMARC policy is p={policy or 'missing'}, expected quarantine or reject"))
+        elif not tags.get("rua"):
+            out.append(("DNS: DMARC", WARN, f"DMARC policy is p={policy} but no rua reporting address is set"))
+        else:
+            out.append(("DNS: DMARC", PASS, f"DMARC policy is p={policy} with reports to {tags['rua']}"))
     cname = [d.rstrip(".").lower() for d in answers(WWW_HOST, "CNAME", 5)]
     out.append(("DNS: www CNAME", PASS if cname == [WWW_TARGET] else FAIL,
                 f"www points to {cname[0]}" if cname else "www has no CNAME record"))
+    return out
+
+
+def check_security_meta():
+    """Every page must carry exactly one CSP and one referrer meta tag, identical across pages."""
+    csp_re = re.compile(r'<meta http-equiv="Content-Security-Policy" content="([^"]*)"', re.I)
+    ref_re = re.compile(r'<meta name="referrer" content="([^"]*)"', re.I)
+    pages = {path: page(path)[1] for path in PAGES}
+    pages[MISSING_PATH] = page(MISSING_PATH)[1]  # the 404 page
+    csps = {p: csp_re.findall(t) for p, t in pages.items()}
+    refs = {p: ref_re.findall(t) for p, t in pages.items()}
+    bad = [p for p in pages if len(csps[p]) != 1 or len(refs[p]) != 1]
+    if bad:
+        return ("Security meta tags", FAIL, "Not exactly one CSP and one referrer tag on: " + ", ".join(bad))
+    if len({csps[p][0] for p in pages}) > 1 or len({refs[p][0] for p in pages}) > 1:
+        return ("Security meta tags", FAIL, "The CSP or referrer tag differs between pages")
+    csp = csps[PAGES[0]][0]
+    if "unsafe-" in csp or "*" in csp or "script-src" in csp:
+        return ("Security meta tags", FAIL, "The CSP was loosened (unsafe-, wildcard or script-src): " + csp)
+    return ("Security meta tags", PASS, f"Same CSP and referrer tag on all {len(pages)} pages")
+
+
+def check_personal_domains():
+    """The other domains must forward to the main site over HTTPS only, with no plain-HTTP hop."""
+    out = []
+    for domain in (d for d in DOMAINS if d != HOST):
+        name = f"Forwarding: {domain}"
+        url, hops, plain = f"https://{domain}/", [], False
+        for _ in range(5):
+            status, headers, _ = http(url, follow=False)
+            location = headers.get("Location", "") if headers else ""
+            if status not in (301, 302, 307, 308) or not location:
+                break
+            url = urllib.parse.urljoin(url, location)
+            hops.append(url)
+            plain = plain or url.startswith("http://")
+        final = urllib.parse.urlparse(url)
+        if final.scheme != "https" or final.hostname != HOST:
+            out.append((name, FAIL, f"Ends at {url}, expected https://{HOST}"))
+        elif plain:
+            out.append((name, WARN, "Redirect chain passes through plain HTTP: " + " -> ".join(hops)))
+        else:
+            out.append((name, PASS, f"Forwards to {url} over HTTPS only"))
     return out
 
 
@@ -320,6 +376,8 @@ def main():
         ("Certificate", check_certificate),
         ("Pages settings", check_pages_settings),
         ("Redirects", check_redirects),
+        ("Security meta", check_security_meta),
+        ("Forwarding", check_personal_domains),
         ("security.txt", check_security_txt),
         *[(f"Domain {d}", lambda d=d: check_domain(d)) for d in DOMAINS],
         ("DNS", check_dns),
