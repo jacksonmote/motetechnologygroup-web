@@ -63,6 +63,8 @@ DOH_SERVERS = [
     ("https://dns.google/resolve", {}),
     ("https://cloudflare-dns.com/dns-query", {"accept": "application/dns-json"}),
 ]
+WORKFLOW_FILE = env("HC_WORKFLOW_FILE", ".github/workflows/checks.yml")  # HC_WORKFLOW_FILE (where the CI tool versions are pinned)
+PATCH_GRACE_DAYS = env_int("HC_PATCH_GRACE_DAYS", 14)  # HC_PATCH_GRACE_DAYS (Node patch releases get this long before a warning)
 USER_AGENT = "Mozilla/5.0 (compatible; mote-health-check; +" + SITE + ")"
 TIMEOUT = 20
 
@@ -332,6 +334,55 @@ def check_personal_domains():
     return out
 
 
+def version_tuple(text):
+    return tuple(int(n) for n in re.findall(r"\d+", text)[:3])
+
+
+def check_tool_versions():
+    """Dependabot cannot see tools pinned inside workflow text, so compare them with the latest releases.
+
+    A newer major or minor release warns. A newer patch release warns for Node
+    only (it ships security fixes), and only after a grace period.
+    """
+    with open(WORKFLOW_FILE, encoding="utf-8") as f:
+        workflow = f.read()
+    node = re.search(r"NODE_VERSION:\s*(\d+\.\d+\.\d+)", workflow)
+    lychee = re.search(r"lycheeVersion:\s*v(\d+\.\d+\.\d+)", workflow)
+    npm_tools = {}
+    for tool in ("html-validate", "pa11y-ci", "playwright"):
+        m = re.search(re.escape(tool) + r"@(\d+\.\d+\.\d+)", workflow)
+        npm_tools[tool] = m.group(1) if m else None
+
+    def judge(name, pinned, latest, patch_warns=False, age_days=0):
+        if pinned is None:
+            return (f"Tool: {name}", WARN, f"Could not find the pinned version in {WORKFLOW_FILE}")
+        p, l = version_tuple(pinned), version_tuple(latest)
+        if l <= p:
+            return (f"Tool: {name}", PASS, f"{pinned} is the latest")
+        if l[:2] != p[:2]:
+            return (f"Tool: {name}", WARN, f"Pinned {pinned}, latest is {latest}")
+        if patch_warns and age_days >= PATCH_GRACE_DAYS:
+            return (f"Tool: {name}", WARN, f"Pinned {pinned}, patch {latest} has been out {age_days} days")
+        return (f"Tool: {name}", PASS, f"{pinned} (patch {latest} available)")
+
+    out = []
+    major = node.group(1).split(".")[0] if node else None
+    _, _, body = http("https://nodejs.org/dist/index.json")
+    releases = [r for r in json.loads(body) if r["version"].startswith(f"v{major}.")]
+    latest = releases[0]
+    age = (datetime.now(timezone.utc) - datetime.fromisoformat(latest["date"] + "T00:00:00+00:00")).days
+    out.append(judge("Node", node.group(1) if node else None, latest["version"].lstrip("v"), True, age))
+    for tool, pinned in npm_tools.items():
+        _, _, body = http(f"https://registry.npmjs.org/{tool}/latest")
+        out.append(judge(tool, pinned, json.loads(body)["version"]))
+    gh_headers = {"accept": "application/vnd.github+json"}
+    if os.environ.get("GH_TOKEN"):  # the workflow's token avoids the shared-runner rate limit
+        gh_headers["authorization"] = "Bearer " + os.environ["GH_TOKEN"]
+    _, _, body = http("https://api.github.com/repos/lycheeverse/lychee/releases/latest", headers=gh_headers)
+    out.append(judge("lychee", lychee.group(1) if lychee else None, json.loads(body)["tag_name"].split("-v")[-1]))
+    return out
+
+
 def check_external_links():
     link = re.compile(r'<a\b[^>]*?\bhref="(https://[^"]+)"', re.I)
     urls = set()
@@ -378,6 +429,7 @@ def main():
         ("Redirects", check_redirects),
         ("Security meta", check_security_meta),
         ("Forwarding", check_personal_domains),
+        ("Tool versions", check_tool_versions),
         ("security.txt", check_security_txt),
         *[(f"Domain {d}", lambda d=d: check_domain(d)) for d in DOMAINS],
         ("DNS", check_dns),
