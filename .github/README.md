@@ -16,6 +16,10 @@ Source for the website at https://motetechnologygroup.com: technology help for s
 - Lighthouse scores 100 for performance, best practices and SEO on mobile and desktop (October 2026).
 - Accessibility scores 100 on most pages. One page scores 95 because Lighthouse measures a scroll fade-in mid-animation.
 
+## Contributing
+
+See [AGENTS.md](AGENTS.md) for how to work on the site and the rules that must not break.
+
 ## Security
 
 Report issues to hello@motetechnologygroup.com. See [security.txt](https://motetechnologygroup.com/.well-known/security.txt).
