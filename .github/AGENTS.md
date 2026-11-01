@@ -1,6 +1,6 @@
 # Working on this repo
 
-Source for https://motetechnologygroup.com: a small static site (home page, `/home/`, `/business/`, `/faq/`, `404.html`) served by GitHub Pages. The [README](README.md) covers the stack, the quality checks and the security contact. This file says how to change the site without breaking it. Follow it as written, whatever tool or agent you use.
+Source for https://motetechnologygroup.com: a small static site (home page, `/home/`, `/business/`, `/faq/`, `/privacy/`, `404.html`) served by GitHub Pages. The [README](README.md) covers the stack, the quality checks and the security contact. This file says how to change the site without breaking it. Follow it as written, whatever tool or agent you use.
 
 ## Checklist for every change
 
@@ -14,22 +14,22 @@ Source for https://motetechnologygroup.com: a small static site (home page, `/ho
 Stack
 - No JavaScript, no build step, no framework. The only scripts are the JSON-LD `<script type="application/ld+json">` data blocks.
 - No inline `style=""` and no per-page `<style>`. All styling is classes in `/styles.css`.
-- Whenever `styles.css` changes, bump `?v=N` in `<link rel="stylesheet" href="/styles.css?v=N">` on all five pages. CI fails if they differ.
+- Whenever `styles.css` changes, bump `?v=N` in `<link rel="stylesheet" href="/styles.css?v=N">` on all six pages. CI fails if they differ.
 - No third-party requests: no analytics, widgets, embeds or external fonts.
-- Every page carries the same Content Security Policy meta tag and the same `referrer` meta tag. Keep them identical on all five pages. Anything that loads from another origin, or inline scripts or styles, must be added to the policy deliberately.
+- Every page carries the same Content Security Policy meta tag and the same `referrer` meta tag. Keep them identical on all six pages. Anything that loads from another origin, or inline scripts or styles, must be added to the policy deliberately.
 - Fonts are self-hosted in `/fonts/` and preloaded on every page. Never request Google Fonts. Never delete `fonts/OFL.txt`. Keep one `@font-face` per weight, as in `styles.css`; do not collapse them into a weight range.
 - Keep `CNAME` and `.nojekyll`. Keep `.well-known/security.txt` valid: its `Expires` date must stay in the future.
 - Images and SVGs: strip all metadata (C2PA Content Credentials, color profiles, EXIF) before committing. The headshot is a `<picture>` with a WebP source and a JPG fallback. Keep `.about-inner picture` as `display: flex`, never `display: contents`. `apple-touch-icon.png` is a full-bleed square with no transparency.
 
 Pages
-- Each of the five pages is a standalone document with its own head, header, nav and footer. Keep header, nav, footer and the inline logo SVG identical across all five.
+- Each of the six pages is a standalone document with its own head, header, nav and footer. Keep header, nav, footer and the inline logo SVG identical across all six.
 - Subpages and `404.html` use root-relative URLs.
 - Home page `<meta name="description">`, `og:description`, `twitter:description` and the JSON-LD description are the same sentence. `site.webmanifest`'s description must equal it (CI checks). Titles stay under about 60 characters, descriptions under about 155.
 - The FAQ JSON-LD must match the visible questions and answers exactly.
 - The home page services must match the cards on `/home/` and `/business/`. The home page writes "&" where the subpages write "and".
 - The hero button text "Start a conversation" is monitored by an uptime check and by `.github/scripts/health_check.py`. Do not change it without updating both.
 - `sitemap.xml` lists every page. Change a page's `lastmod` only for meaningful copy changes, never for technical edits.
-- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ). The footer email link has none.
+- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none.
 
 Styling
 - Use role tokens (`--heading`, `--card`, `--tile`, `--on-accent`, `--on-inverse`, `--about-bg`, and so on), not raw palette tokens. A new color use needs a role token with a light value and a dark value, or it breaks dark mode.

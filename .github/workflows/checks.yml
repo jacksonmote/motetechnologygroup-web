@@ -48,7 +48,7 @@ jobs:
           python3 - <<'PY'
           import os, re, subprocess, sys
 
-          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html"]
+          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html", "privacy/index.html"]
           LINK = re.compile(r'<link\b[^>]*\bhref="([^"]*styles\.css[^"]*)"')
           VERSIONED = re.compile(r"/styles\.css\?v=(\d+)")
 
@@ -96,7 +96,7 @@ jobs:
           python3 - <<'PY'
           import html, json, os, re, struct, sys
 
-          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html"]
+          PAGES = ["index.html", "404.html", "home/index.html", "business/index.html", "faq/index.html", "privacy/index.html"]
           EXPECTED = {
               "name": "Mote Technology Group", "short_name": "Mote Tech", "id": "/", "start_url": "/",
               "scope": "/", "display": "browser", "lang": "en",

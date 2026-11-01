@@ -42,7 +42,7 @@ def env_int(name, default):
 # --- Constants (update these in the same PR when a domain, DNS record or page changes) ---
 SITE = env("HC_SITE", "https://motetechnologygroup.com").rstrip("/")  # HC_SITE
 HOST = urllib.parse.urlparse(SITE).hostname
-PAGES = env("HC_PAGES", "/,/home/,/business/,/faq/").split(",")  # HC_PAGES
+PAGES = env("HC_PAGES", "/,/home/,/business/,/faq/,/privacy/").split(",")  # HC_PAGES
 KEYWORD = env("HC_KEYWORD", "Start a conversation")  # HC_KEYWORD (UptimeRobot keyword)
 MISSING_PATH = "/health-check-no-such-page/"
 INDEX_FILE = env("HC_INDEX_FILE", "index.html")  # HC_INDEX_FILE (checked-out home page)
