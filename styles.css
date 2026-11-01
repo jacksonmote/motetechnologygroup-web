@@ -369,11 +369,17 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between;
   color: var(--muted); font-size: 14px;
 }
-.footer-email, .footer-email:hover {
+.footer-email, .footer-email:hover, .footer-link, .footer-link:hover {
   display: inline-flex; align-items: center; min-height: 44px; color: var(--accent); font-weight: 600;
   text-decoration-color: var(--accent-soft); text-underline-offset: 4px;
 }
-.footer-email:hover { text-decoration-color: var(--accent); }
+.footer-email:hover, .footer-link:hover { text-decoration-color: var(--accent); }
+
+/* Privacy page: a single readable column */
+.prose { box-sizing: border-box; width: 100%; max-width: calc(760px + 2 * var(--gutter)); padding-top: 72px; }
+.prose h2 { margin: 40px 0 12px; font-family: var(--font-heading); font-size: var(--step-h2-faq); letter-spacing: -0.02em; line-height: 1.15; }
+.prose h2:first-child { margin-top: 0; }
+.prose p { margin: 0 0 16px; color: var(--text); }
 
 /* Scroll fade-ins: section headings and card groups fade and rise as they
    enter the viewport. Only where scroll-driven animations are supported and

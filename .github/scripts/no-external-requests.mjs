@@ -8,7 +8,7 @@
 import { chromium } from 'playwright';
 
 const base = new URL(process.argv[2] || 'http://localhost:8000/');
-const pages = ['/', '/home/', '/business/', '/faq/', '/404.html'];
+const pages = ['/', '/home/', '/business/', '/faq/', '/privacy/', '/404.html'];
 const viewports = [
   { name: 'desktop', width: 1280, height: 900 },
   { name: 'phone', width: 390, height: 844 },
