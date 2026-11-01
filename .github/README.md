@@ -24,6 +24,10 @@ See [AGENTS.md](AGENTS.md) for how to work on the site and the rules that must n
 
 Report issues to hello@motetechnologygroup.com. See [security.txt](https://motetechnologygroup.com/.well-known/security.txt).
 
+## Privacy
+
+The site sets no cookies and runs no analytics or tracking. See the [privacy policy](https://motetechnologygroup.com/privacy/).
+
 ## Copyright
 
 © 2026 Jackson Mote. All rights reserved. This code is published for reference and is not licensed for reuse. The fonts in `/fonts` are under the SIL Open Font License (see `fonts/OFL.txt`).
