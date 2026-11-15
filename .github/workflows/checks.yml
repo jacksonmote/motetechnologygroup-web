@@ -33,7 +33,7 @@ jobs:
       # - doctype-style: wants <!DOCTYPE html> in uppercase. The lowercase
       #   <!doctype html> the pages use is equally valid HTML; style only.
       - name: Validate HTML
-        run: npx --yes html-validate@11.17.0 --config .github/htmlvalidate.json $(git ls-files '*.html')
+        run: npx --yes html-validate@11.21.0 --config .github/htmlvalidate.json $(git ls-files '*.html')
       # Cache-busting: every page must link the stylesheet as /styles.css?v=N
       # with the same N everywhere. On pull requests, if styles.css differs from
       # the base branch, N must be higher than the base branch's N, so returning
@@ -242,6 +242,6 @@ jobs:
       # Installed next to the script (not committed) so its import resolves.
       # The script uses the runner's Google Chrome, so no browser download.
       - name: Install Playwright
-        run: npm install --no-save --no-package-lock --no-audit --no-fund --prefix .github/scripts playwright@1.64.1
+        run: npm install --no-save --no-package-lock --no-audit --no-fund --prefix .github/scripts playwright@1.65.0
       - name: Load every page and check requests and console
         run: node .github/scripts/no-external-requests.mjs http://localhost:8000/
