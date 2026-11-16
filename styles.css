@@ -310,6 +310,9 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .band-main { display: flex; flex-direction: column; gap: 12px; }
 .band-title { margin: 0; font-family: var(--font-heading); font-size: var(--step-h3-lg); }
 .band-text, .band-main .tp { max-width: 560px; }
+/* Tiles and steps are lists with no bullets or numbers showing. The empty-string marker
+   looks the same as "none"; it is there because Safari stops announcing a list styled "none". */
+.tile-grid, .step-list, .steps, ol.how-cols { margin: 0; padding: 0; list-style: none; list-style-type: ""; }
 .tile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 560px) { .tile-grid { grid-template-columns: minmax(0, 1fr); } }
 .tile {
@@ -447,7 +450,7 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   .faq summary::after { display: none; }
 
   h1, h2, h3, h4, .group-label, .eyebrow, .svc-note { break-after: avoid; }
-  .card, .note-card, .tile, .faq details, .step-list > div, .steps > div, .how-cols > div, .cta { break-inside: avoid; }
+  .card, .note-card, .tile, .faq details, .step-list > li, .steps > li, .how-cols > div, .how-cols > li, .cta { break-inside: avoid; }
 
   /* One card per row, so a tall row of cards cannot push half a page of white space ahead of it */
   .card-grid { grid-template-columns: minmax(0, 1fr); }
