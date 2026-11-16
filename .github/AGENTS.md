@@ -16,19 +16,20 @@ Stack
 - No inline `style=""` and no per-page `<style>`. All styling is classes in `/styles.css`.
 - Whenever `styles.css` changes, bump `?v=N` in `<link rel="stylesheet" href="/styles.css?v=N">` on all six pages. CI fails if they differ.
 - No third-party requests: no analytics, widgets, embeds or external fonts.
-- Every page carries the same Content Security Policy meta tag and the same `referrer` meta tag. Keep them identical on all six pages. Anything that loads from another origin, or inline scripts or styles, must be added to the policy deliberately.
+- Every page carries the same Content Security Policy meta tag and the same `referrer` meta tag. Keep them identical on all six pages (CI checks). Anything that loads from another origin, or inline scripts or styles, must be added to the policy deliberately.
 - Fonts are self-hosted in `/fonts/` and preloaded on every page. Never request Google Fonts. Never delete `fonts/OFL.txt`. Keep one `@font-face` per weight, as in `styles.css`; do not collapse them into a weight range.
 - Keep `CNAME` and `.nojekyll`. Keep `.well-known/security.txt` valid: its `Expires` date must stay in the future.
 - Images and SVGs: strip all metadata (C2PA Content Credentials, color profiles, EXIF) before committing. The headshot is a `<picture>` with a WebP source and a JPG fallback. Keep `.about-inner picture` as `display: flex`, never `display: contents`. `apple-touch-icon.png` is a full-bleed square with no transparency.
 
 Pages
-- Each of the six pages is a standalone document with its own head, header, nav and footer. Keep header, nav, footer and the inline logo SVG identical across all six.
+- Each of the six pages is a standalone document with its own head, header, nav and footer. Keep header, nav, footer and the inline logo SVG identical across all six (CI compares the header and footer, ignoring the nav's `aria-current`).
 - Subpages and `404.html` use root-relative URLs.
-- Home page `<meta name="description">`, `og:description`, `twitter:description` and the JSON-LD description are the same sentence. `site.webmanifest`'s description must equal it (CI checks). Titles stay under about 60 characters, descriptions under about 155.
-- The FAQ JSON-LD must match the visible questions and answers exactly.
+- Heading levels go in order, with no gaps. On the home page the "For businesses" and "For homes" labels are `h3`, and the card, band and step titles under them are `h4`.
+- Home page `<meta name="description">`, `og:description`, `twitter:description` and the JSON-LD description are the same sentence, and `site.webmanifest`'s description must equal it (CI checks both). Titles stay under about 60 characters, descriptions under about 155.
+- The FAQ JSON-LD must match the visible questions and answers exactly, in the same order (CI checks).
 - The home page services must match the cards on `/home/` and `/business/`. The home page writes "&" where the subpages write "and".
 - The hero button text "Start a conversation" is monitored by an uptime check and by `.github/scripts/health_check.py`. Do not change it without updating both.
-- `sitemap.xml` lists every page. Change a page's `lastmod` only for meaningful copy changes, never for technical edits.
+- `sitemap.xml` lists every page that has a canonical URL (CI checks). Change a page's `lastmod` only for meaningful copy changes, never for technical edits.
 - Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none. One accepted exception: the link in the FAQ answer to "How do I get started?" uses "Project inquiry".
 
 Styling
@@ -39,6 +40,9 @@ Styling
 - Write fluid sizes in this exact form so they hit the end points exactly: `clamp(min, min + (max - min) * (100vw - 390px) / 890, max)`.
 - Keep text contrast at WCAG AA (4.5:1) and touch targets at least 44px.
 - Never hide nav links. The two long nav links hold `<span class="nav-long">` and `<span class="nav-short">`, and only one of the two is displayed at a time, so each link's accessible name is its visible text. Do not add an `aria-label` unless it starts with the visible text (WCAG 2.5.3). Keep each label as one span; splitting it around a nested span breaks the current-page underline.
+- The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row.
+- Short nav links reach the 44px touch target through the `.nav-link::before` overlay, which widens the tap area without changing the spacing. Keep it.
+- On the FAQ and privacy pages the text column is 760px wide and starts at the page title's left edge. Do not center it.
 - Dark mode is automatic (`prefers-color-scheme`), with no toggle and no script. It is screen-only, so print stays light.
 - Scroll fade-ins live only inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`. Never animate the hero text.
 - The hero graphic is SVG SMIL on one shared clock. Do not move its dots to CSS animation, because the two clocks drift. Any new SVG animation must also be hidden under `prefers-reduced-motion: reduce`, since SMIL ignores it.
