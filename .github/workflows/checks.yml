@@ -141,6 +141,14 @@ jobs:
               sys.exit("\n".join(errors))
           print(f"site.webmanifest OK: {len(icons)} icons, linked from all {len(PAGES)} pages")
           PY
+      # Page consistency: the "must match" rules in AGENTS.md. The same Content
+      # Security Policy and referrer meta tags, header and footer on all six
+      # pages; FAQ structured data equal to the visible questions and answers;
+      # one home page description sentence everywhere it appears; sitemap.xml
+      # and the canonical URLs in step.
+      - name: Page consistency
+        if: success() || failure()
+        run: python3 .github/scripts/check_consistency.py
 
   links:
     name: Links

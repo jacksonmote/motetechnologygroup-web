@@ -4,7 +4,7 @@ Source for https://motetechnologygroup.com: a small static site (home page, `/ho
 
 ## Checklist for every change
 
-1. Run the CI checks locally where you can. Workflow: `.github/workflows/checks.yml` (HTML validation, stylesheet version, manifest, links, pa11y accessibility at 1280px and 390px in light and dark mode, no outside requests). Use the tool versions pinned there.
+1. Run the CI checks locally where you can. Workflow: `.github/workflows/checks.yml` (HTML validation, stylesheet version, manifest, page consistency, links, pa11y accessibility at 1280px and 390px in light and dark mode, no outside requests). Use the tool versions pinned there.
 2. Preview visible changes at about 390px, 768px and 1280px, in light and dark mode, and tab through with the keyboard. Serve from the repo root: `python -m http.server 8000`. The local server does not serve `404.html` for missing paths, so open `/404.html` directly.
 3. Update the README in the same PR when something it claims changes (stack, checks, scores, security contact). The README must contain nothing private, no em dashes, no badges or images. CI does not check links in `.md` files, so check them by hand.
 4. Run `git status` and review the staged files before every commit. Stage only site files and `.github/` files.
