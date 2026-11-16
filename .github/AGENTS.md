@@ -38,7 +38,7 @@ Styling
 - Use `:focus-visible` for focus rings, never `:focus`. Never remove outlines.
 - Write fluid sizes in this exact form so they hit the end points exactly: `clamp(min, min + (max - min) * (100vw - 390px) / 890, max)`.
 - Keep text contrast at WCAG AA (4.5:1) and touch targets at least 44px.
-- Never hide nav links. The two long nav links hold `<span class="nav-long">` and `<span class="nav-short">` with an `aria-label` carrying the full name. Keep each label as one span; splitting it around a nested span breaks the current-page underline.
+- Never hide nav links. The two long nav links hold `<span class="nav-long">` and `<span class="nav-short">`, and only one of the two is displayed at a time, so each link's accessible name is its visible text. Do not add an `aria-label` unless it starts with the visible text (WCAG 2.5.3). Keep each label as one span; splitting it around a nested span breaks the current-page underline.
 - Dark mode is automatic (`prefers-color-scheme`), with no toggle and no script. It is screen-only, so print stays light.
 - Scroll fade-ins live only inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`. Never animate the hero text.
 - The hero graphic is SVG SMIL on one shared clock. Do not move its dots to CSS animation, because the two clocks drift. Any new SVG animation must also be hidden under `prefers-reduced-motion: reduce`, since SMIL ignores it.
