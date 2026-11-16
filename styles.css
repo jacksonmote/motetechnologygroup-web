@@ -131,6 +131,8 @@ html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--page); }
 /* Avoid a lone word on the last line of a paragraph (no effect where unsupported) */
 p, li { text-wrap: pretty; }
+/* Headings and short labels: even line lengths, so none ends on a lone word */
+h1, h2, h3, h4, summary, .tile { text-wrap: balance; }
 a { color: var(--link); transition: color var(--ease), text-decoration-color var(--ease); }
 a:hover { color: var(--link-hover); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -156,6 +158,7 @@ a:hover { color: var(--link-hover); }
 /* Layout */
 .section { max-width: var(--content-width); margin: 0 auto; padding: var(--space-section) var(--gutter); }
 .section-white { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+main > .section-white:last-child { border-bottom: 0; } /* the footer draws that line */
 .section-title {
   margin: 0 0 48px; font-family: var(--font-heading);
   font-size: var(--step-h2); letter-spacing: -0.02em; line-height: 1.15;
@@ -180,15 +183,14 @@ a:hover { color: var(--link-hover); }
 .mark-hub { fill: var(--accent); }
 .site-nav { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
 .nav-link {
-  display: inline-flex; align-items: center; min-height: 44px; color: var(--text); font-weight: 500;
+  position: relative; display: inline-flex; align-items: center; min-height: 44px; color: var(--text); font-weight: 500;
   text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 8px;
 }
+/* Short links such as "FAQ" stay at least 44px wide to tap, without changing the spacing */
+.nav-link::before { content: ""; position: absolute; inset: 0 min(0px, (100% - 44px) / 2); }
 .nav-link:hover { color: var(--heading); text-decoration-color: var(--accent-soft); }
 .nav-short { display: none; }
-.site-nav a[aria-current="page"] {
-  color: var(--heading); text-decoration: underline; text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px; text-underline-offset: 8px;
-}
+.site-nav a[aria-current="page"] { color: var(--heading); text-decoration-color: var(--accent); }
 .nav-cta {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
   border-radius: var(--radius-sm); background: var(--inverse); color: var(--on-inverse); text-decoration: none; font-weight: 600;
@@ -196,9 +198,14 @@ a:hover { color: var(--link-hover); }
 }
 .nav-cta:hover { color: var(--on-inverse); transform: var(--lift); box-shadow: var(--shadow-hover); }
 .nav-cta:active { transform: none; box-shadow: var(--shadow-press); }
+/* Too narrow for one header row: the nav takes the second row, with the LinkedIn button at its right edge */
+@media (min-width: 700px) and (max-width: 1019px) {
+  .site-nav { flex: 1 1 100%; }
+  .nav-cta { margin-left: auto; }
+}
+@media (max-width: 699px) { .nav-cta { display: none; } }
 @media (max-width: 640px) {
   .site-header { row-gap: 4px; }
-  .nav-cta { display: none; }
   .site-nav { column-gap: 14px; row-gap: 0; font-size: 15px; }
   .nav-long { display: none; }
   .nav-short { display: inline; }
@@ -241,6 +248,13 @@ a:hover { color: var(--link-hover); }
 .group-label { margin: 0 0 16px; color: var(--muted); }
 .group-label-spaced { margin-top: 48px; }
 .how-cols .group-label { margin-bottom: 24px; }
+/* Phones: a smaller intro and tighter spacing keep the main button on the first screen */
+@media (max-width: 640px) {
+  .hero { padding-top: 16px; }
+  .eyebrow { margin-bottom: 16px; }
+  .hero-title { margin-bottom: 20px; }
+  .lead { margin-bottom: 28px; font-size: 18px; }
+}
 
 /* Buttons */
 .btn-row { display: flex; flex-wrap: wrap; gap: 16px; }
@@ -267,7 +281,7 @@ a:hover { color: var(--link-hover); }
 
 /* Cards */
 .svc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-@media (max-width: 1000px) { .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1159px) { .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .svc-grid { grid-template-columns: minmax(0, 1fr); } }
 .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 @media (max-width: 640px) { .card-grid { grid-template-columns: minmax(0, 1fr); } }
@@ -295,7 +309,7 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .band-col { flex: 1 1 360px; min-width: 0; }
 .band-main { display: flex; flex-direction: column; gap: 12px; }
 .band-title { margin: 0; font-family: var(--font-heading); font-size: var(--step-h3-lg); }
-.band-text { max-width: 460px; }
+.band-text, .band-main .tp { max-width: 560px; }
 .tile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 560px) { .tile-grid { grid-template-columns: minmax(0, 1fr); } }
 .tile {
@@ -332,7 +346,7 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 
 /* FAQ */
 .faq-list { padding: 72px var(--gutter) var(--space-section); display: flex; flex-direction: column; gap: 56px; }
-.faq-group { width: 100%; max-width: 760px; margin: 0 auto; }
+.faq-group { width: 100%; max-width: 760px; }
 .faq-group-title { margin: 0 0 20px; font-family: var(--font-heading); font-size: var(--step-h2-faq); letter-spacing: -0.02em; line-height: 1.15; }
 .faq { display: flex; flex-direction: column; gap: 12px; }
 .faq details {
@@ -348,7 +362,7 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after { content: "+"; content: "+" / ""; flex: 0 0 auto; color: var(--accent); font-size: 28px; font-weight: 500; line-height: 1; }
 .faq details[open] summary::after { content: "\2212"; content: "\2212" / ""; }
-.faq details p { margin: 0; padding: 0 24px 22px; color: var(--text); font-size: 16px; }
+.faq details p { margin: 0; padding: 0 24px 22px; color: var(--text); font-size: 16px; overflow-wrap: break-word; }
 
 /* Closing call to action */
 .cta { max-width: var(--content-width); margin: 0 auto; padding: var(--space-cta) var(--gutter); text-align: center; }
@@ -380,11 +394,12 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   .footer-email { justify-self: end; }
 }
 
-/* Privacy page: a single readable column */
-.prose { box-sizing: border-box; width: 100%; max-width: calc(760px + 2 * var(--gutter)); padding-top: 72px; }
+/* Privacy page: a single readable column, starting at the same left edge as the page title */
+.prose { padding-top: 72px; }
+.prose > * { max-width: 760px; }
 .prose h2 { margin: 40px 0 12px; font-family: var(--font-heading); font-size: var(--step-h2-faq); letter-spacing: -0.02em; line-height: 1.15; }
 .prose h2:first-child { margin-top: 0; }
-.prose p { margin: 0 0 16px; color: var(--text); }
+.prose p { margin: 0 0 16px; color: var(--text); overflow-wrap: break-word; }
 
 /* Scroll fade-ins: section headings and card groups fade and rise as they
    enter the viewport. Only where scroll-driven animations are supported and
@@ -403,7 +418,8 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 
 /* Print: dark text on white with the logo and page content. Navigation,
    buttons and decoration are dropped; the closing email button prints as
-   the address, and every FAQ answer prints expanded. */
+   the address, every FAQ answer prints expanded, and links in the privacy
+   policy print their address. */
 @media print {
   @page { margin: 16mm; }
   :root {
@@ -430,6 +446,16 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   .faq details::details-content { content-visibility: visible; }
   .faq summary::after { display: none; }
 
-  h1, h2, h3, .group-label, .eyebrow, .svc-note { break-after: avoid; }
-  .card, .note-card, .tile, .faq details, .step-list > div, .steps > div { break-inside: avoid; }
+  h1, h2, h3, h4, .group-label, .eyebrow, .svc-note { break-after: avoid; }
+  .card, .note-card, .tile, .faq details, .step-list > div, .steps > div, .how-cols > div, .cta { break-inside: avoid; }
+
+  /* One card per row, so a tall row of cards cannot push half a page of white space ahead of it */
+  .card-grid { grid-template-columns: minmax(0, 1fr); }
+  .prose a[href^="https:"] { overflow-wrap: anywhere; }
+  .prose a[href^="https:"]::after { content: " (" attr(href) ")"; font-weight: 400; }
+
+  /* Footer: three short lines kept with the content above them */
+  .site-footer { break-before: avoid; break-inside: avoid; }
+  .footer-inner { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 16px var(--gutter) 0; }
+  .footer-email, .footer-email:hover, .footer-link, .footer-link:hover { display: inline; min-height: 0; }
 }
