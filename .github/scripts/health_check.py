@@ -45,6 +45,7 @@ HOST = urllib.parse.urlparse(SITE).hostname
 PAGES = env("HC_PAGES", "/,/home/,/business/,/faq/,/privacy/").split(",")  # HC_PAGES
 KEYWORD = env("HC_KEYWORD", "Start a conversation")  # HC_KEYWORD (UptimeRobot keyword)
 MISSING_PATH = "/health-check-no-such-page/"
+UNSERVED_PATHS = ["/.github/README.md", "/.github/AGENTS.md"]  # repo documents that must not be part of the site
 INDEX_FILE = env("HC_INDEX_FILE", "index.html")  # HC_INDEX_FILE (checked-out home page)
 CERT_HOST = env("HC_CERT_HOST", HOST)  # HC_CERT_HOST
 CERT_FAIL_DAYS = env_int("HC_CERT_FAIL_DAYS", 14)  # HC_CERT_FAIL_DAYS
@@ -53,12 +54,15 @@ WWW_HOST = "www." + HOST
 SECURITY_TXT_FILE = env("HC_SECURITY_TXT_FILE", "")  # HC_SECURITY_TXT_FILE (read instead of live file)
 SECTXT_FAIL_DAYS = env_int("HC_SECTXT_FAIL_DAYS", 30)  # HC_SECTXT_FAIL_DAYS
 SECTXT_WARN_DAYS = env_int("HC_SECTXT_WARN_DAYS", 60)  # HC_SECTXT_WARN_DAYS
+SECURITY_CONTACT = env("HC_SECURITY_CONTACT", "mailto:security@" + HOST)  # HC_SECURITY_CONTACT
 DOMAINS = env("HC_DOMAINS", "motetechnologygroup.com,jacksonmote.com,motejackson.com").split(",")  # HC_DOMAINS
 RDAP_URL = env("HC_RDAP_URL", "https://rdap.verisign.com/com/v1/domain/")  # HC_RDAP_URL
 DOMAIN_FAIL_DAYS = env_int("HC_DOMAIN_FAIL_DAYS", 30)  # HC_DOMAIN_FAIL_DAYS
 DOMAIN_WARN_DAYS = env_int("HC_DOMAIN_WARN_DAYS", 60)  # HC_DOMAIN_WARN_DAYS
 EXPECTED_CAA = env("HC_EXPECTED_CAA", '0 issue "letsencrypt.org"')  # HC_EXPECTED_CAA
 WWW_TARGET = env("HC_WWW_TARGET", "jacksonmote.github.io")  # HC_WWW_TARGET
+EXPECTED_MX = env("HC_EXPECTED_MX", "smtp.google.com")  # HC_EXPECTED_MX (Google Workspace mail)
+THIS_YEAR = env_int("HC_THIS_YEAR", datetime.now(timezone.utc).year)  # HC_THIS_YEAR (test the footer year check)
 DOH_SERVERS = [
     ("https://dns.google/resolve", {}),
     ("https://cloudflare-dns.com/dns-query", {"accept": "application/dns-json"}),
@@ -130,6 +134,42 @@ def check_pages():
                 f'Found "{KEYWORD}"' if KEYWORD in home else f'"{KEYWORD}" not found on the home page'))
     status, _ = get_text(MISSING_PATH)
     out.append(("Missing page returns 404", PASS if status == 404 else FAIL, f"Made-up path returned {status}"))
+    served = [path for path in UNSERVED_PATHS if get_text(path)[0] != 404]
+    out.append(("Repo documents not served", WARN if served else PASS,
+                "Served by the site: " + ", ".join(served) if served else f"{len(UNSERVED_PATHS)} paths under /.github/ return 404"))
+    year = re.search(r"(?:©|&copy;)\s*(\d{4})", home)
+    if not year:
+        out.append(("Footer year", WARN, "No copyright year found in the home page footer"))
+    elif int(year.group(1)) < THIS_YEAR:
+        out.append(("Footer year", WARN, f"Footer says {year.group(1)}; it is {THIS_YEAR}"))
+    else:
+        out.append(("Footer year", PASS, f"Footer says {year.group(1)}"))
+    return out
+
+
+def check_sitemap():
+    """sitemap.xml lists exactly the live pages, and robots.txt points to it."""
+    out = []
+    status, text = get_text("/sitemap.xml")
+    listed = sorted(re.findall(r"<loc>(.*?)</loc>", text)) if status == 200 else []
+    expected = sorted(SITE + path for path in PAGES)
+    if status != 200:
+        out.append(("Sitemap", FAIL, f"/sitemap.xml returned {status}"))
+    elif listed != expected:
+        missing = [u for u in expected if u not in listed]
+        extra = [u for u in listed if u not in expected]
+        out.append(("Sitemap", FAIL, "; ".join(filter(None, [
+            "Not listed: " + ", ".join(missing) if missing else "", "Unexpected: " + ", ".join(extra) if extra else ""]))
+            or "A page is listed twice"))
+    else:
+        out.append(("Sitemap", PASS, f"Lists the {len(PAGES)} pages"))
+    status, text = get_text("/robots.txt")
+    wanted = f"Sitemap: {SITE}/sitemap.xml"
+    if status != 200:
+        out.append(("robots.txt", FAIL, f"/robots.txt returned {status}"))
+    else:
+        found = any(line.strip() == wanted for line in text.splitlines())
+        out.append(("robots.txt", PASS if found else FAIL, "Points to the sitemap" if found else f'No "{wanted}" line'))
     return out
 
 
@@ -197,8 +237,13 @@ def check_security_txt():
         if status != 200:
             return [("security.txt", FAIL, f"/.well-known/security.txt returned {status}")]
     out = []
-    has_contact = re.search(r"^Contact:\s*\S+", text, re.M) is not None
-    out.append(("security.txt contact", PASS if has_contact else FAIL, "Contact line present" if has_contact else "No Contact line"))
+    contacts = re.findall(r"^Contact:\s*(\S+)", text, re.M)
+    if not contacts:
+        out.append(("security.txt contact", FAIL, "No Contact line"))
+    elif SECURITY_CONTACT not in contacts:
+        out.append(("security.txt contact", FAIL, f"Contact is {', '.join(contacts)}, expected {SECURITY_CONTACT}"))
+    else:
+        out.append(("security.txt contact", PASS, f"Contact is {SECURITY_CONTACT}"))
     m = re.search(r"^Expires:\s*(\S+)", text, re.M)
     if not m:
         out.append(("security.txt expiry", FAIL, "No Expires line"))
@@ -273,6 +318,9 @@ def check_dns():
     out.append(("DNS: DNSSEC", PASS if ad else FAIL, "DNSSEC validates (AD flag set)" if ad else "DNSSEC did not validate (AD flag not set)"))
     spf = [txt_value(d) for d in answers(HOST, "TXT", 16) if txt_value(d).startswith("v=spf1")]
     out.append(("DNS: SPF", PASS if spf else FAIL, "SPF record present" if spf else "No SPF TXT record on the apex"))
+    mx = sorted(d.split()[-1].rstrip(".").lower() for d in answers(HOST, "MX", 15))
+    out.append(("DNS: MX", PASS if mx == [EXPECTED_MX] else FAIL,
+                "No MX record found" if not mx else f"Mail goes to {', '.join(mx)}" + ("" if mx == [EXPECTED_MX] else f", expected {EXPECTED_MX}")))
     dmarc = [txt_value(d) for d in answers("_dmarc." + HOST, "TXT", 16) if txt_value(d).startswith("v=DMARC1")]
     if not dmarc:
         out.append(("DNS: DMARC", FAIL, "No DMARC record at _dmarc"))
@@ -423,6 +471,7 @@ def main():
     results = []
     for label, func in (
         ("Site", check_pages),
+        ("Sitemap", check_sitemap),
         ("Live matches main", check_live_matches_main),
         ("Certificate", check_certificate),
         ("Pages settings", check_pages_settings),
