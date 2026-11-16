@@ -5,7 +5,7 @@ Source for https://motetechnologygroup.com: a small static site (home page, `/ho
 ## Checklist for every change
 
 1. Run the CI checks locally where you can. Workflow: `.github/workflows/checks.yml` (HTML validation, stylesheet version, manifest, page consistency, links, pa11y accessibility at 1280px and 390px in light and dark mode, no outside requests). Use the tool versions pinned there.
-2. Preview visible changes at about 390px, 768px and 1280px, in light and dark mode, and tab through with the keyboard. Serve from the repo root: `python -m http.server 8000`. The local server does not serve `404.html` for missing paths, so open `/404.html` directly.
+2. Preview visible changes at about 390px, 768px, 1024px and 1280px, in light and dark mode, and tab through with the keyboard. Serve from the repo root: `python -m http.server 8000`. The local server does not serve `404.html` for missing paths, so open `/404.html` directly.
 3. Update the README in the same PR when something it claims changes (stack, checks, scores, security contact). The README must contain nothing private, no em dashes, no badges or images. CI does not check links in `.md` files, so check them by hand.
 4. Run `git status` and review the staged files before every commit. Stage only site files and `.github/` files.
 
@@ -29,10 +29,10 @@ Pages
 - The home page services must match the cards on `/home/` and `/business/`. The home page writes "&" where the subpages write "and".
 - The hero button text "Start a conversation" is monitored by an uptime check and by `.github/scripts/health_check.py`. Do not change it without updating both.
 - `sitemap.xml` lists every page. Change a page's `lastmod` only for meaningful copy changes, never for technical edits.
-- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none.
+- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none. One accepted exception: the link in the FAQ answer to "How do I get started?" uses "Project inquiry".
 
 Styling
-- Use role tokens (`--heading`, `--card`, `--tile`, `--on-accent`, `--on-inverse`, `--about-bg`, and so on), not raw palette tokens. A new color use needs a role token with a light value and a dark value, or it breaks dark mode.
+- Take colors from tokens that dark mode remaps: the role tokens (`--heading`, `--card`, `--tile`, `--on-accent`, `--on-inverse`, `--about-bg`, and so on) and `--text`, `--muted`, `--accent`, `--border`, `--page`, `--surface`, `--band` and `--link`. The fixed tokens (`--ink`, `--on-dark`, `--accent-on-dark`, `--about-heading`) keep one value in both modes: use them only in role definitions and in the About section, which is dark in both modes. A new color use needs a token with a light value and a dark value, or it breaks dark mode.
 - Link-like classes that must not turn link-hover brown (buttons, nav links, brand, footer email) list their own `:hover` state.
 - Transitions use `var(--ease)` and lifts use `var(--lift)`. Animate only color, background-color, border-color, box-shadow, transform and text-decoration-color. Hard-coded durations or transforms ignore reduced motion.
 - Use `:focus-visible` for focus rings, never `:focus`. Never remove outlines.
