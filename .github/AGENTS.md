@@ -40,7 +40,7 @@ Styling
 - Write fluid sizes in this exact form so they hit the end points exactly: `clamp(min, min + (max - min) * (100vw - 390px) / 890, max)`.
 - Keep text contrast at WCAG AA (4.5:1) and touch targets at least 44px.
 - Never hide nav links. The two long nav links hold `<span class="nav-long">` and `<span class="nav-short">`, and only one of the two is displayed at a time, so each link's accessible name is its visible text. Do not add an `aria-label` unless it starts with the visible text (WCAG 2.5.3). Keep each label as one span; splitting it around a nested span breaks the current-page underline.
-- The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row.
+- The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row. The footer's LinkedIn link, next to "Privacy", is what phones get on every page, so keep it.
 - Short nav links reach the 44px touch target through the `.nav-link::before` overlay, which widens the tap area without changing the spacing. Keep it.
 - The numbered steps are `ol` lists and the home page tiles are a `ul`, styled to show no numbers or bullets. Keep the `list-style-type: ""` that follows `list-style: none`, and keep `aria-hidden="true"` on the visible step numbers, since the list already gives the order.
 - On the home page the two step lists sit side by side and share their rows (`.how-pair`, CSS subgrid), so step 01 lines up with step 01. The rule allows four steps per column: a fifth step needs one more row there.

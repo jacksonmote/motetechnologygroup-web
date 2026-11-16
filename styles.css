@@ -401,8 +401,9 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
   text-decoration-color: var(--accent-soft); text-underline-offset: 4px;
 }
 .footer-email:hover, .footer-link:hover { text-decoration-color: var(--accent); }
-.footer-legal { display: inline-flex; flex-wrap: wrap; column-gap: 20px; align-items: baseline; }
-@media (min-width: 920px) {
+/* The two footer links stay together: where the row is too narrow they move under the copyright line as a pair */
+.footer-legal, .footer-links { display: inline-flex; flex-wrap: wrap; column-gap: 20px; align-items: baseline; }
+@media (min-width: 1020px) {
   .footer-inner { display: grid; grid-template-columns: 1fr auto 1fr; column-gap: 12px; }
   .footer-email { justify-self: end; }
 }
