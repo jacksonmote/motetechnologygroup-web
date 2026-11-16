@@ -20,6 +20,7 @@ Stack
 - Fonts are self-hosted in `/fonts/` and preloaded on every page. Never request Google Fonts. Never delete `fonts/OFL.txt`. Keep one `@font-face` per weight, as in `styles.css`; do not collapse them into a weight range.
 - Keep `CNAME` and `.nojekyll`. Keep `.well-known/security.txt` valid: its `Expires` date must stay in the future.
 - Images and SVGs: strip all metadata (C2PA Content Credentials, color profiles, EXIF) before committing. The headshot is a `<picture>` with a WebP source and a JPG fallback. Keep `.about-inner picture` as `display: flex`, never `display: contents`. `apple-touch-icon.png` is a full-bleed square with no transparency.
+- `favicon.ico` (16, 32 and 48px) is not linked from any page. It is there for browsers and other clients that ask for `/favicon.ico` directly, so keep it, and regenerate it if the logo mark changes. The pages link `favicon.svg` and `favicon-32.png`.
 
 Pages
 - Each of the six pages is a standalone document with its own head, header, nav and footer. Keep header, nav, footer and the inline logo SVG identical across all six (CI compares the header and footer, ignoring the nav's `aria-current`).
@@ -30,24 +31,24 @@ Pages
 - The home page services must match the cards on `/home/` and `/business/`. The home page writes "&" where the subpages write "and".
 - The hero button text "Start a conversation" is monitored by an uptime check and by `.github/scripts/health_check.py`. Do not change it without updating both.
 - `sitemap.xml` lists every page that has a canonical URL (CI checks). Change a page's `lastmod` only for meaningful copy changes, never for technical edits.
-- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none. One accepted exception: the link in the FAQ answer to "How do I get started?" uses "Project inquiry".
+- Mailto subjects are per page ("Project inquiry" on the home page, "Home services inquiry", "Business inquiry", "Question" on the FAQ, "Privacy request" on the privacy page). The footer email link has none, and neither does the "email me" link on the 404 page. One accepted exception: the link in the FAQ answer to "How do I get started?" uses "Project inquiry".
 
 Styling
 - Take colors from tokens that dark mode remaps: the role tokens (`--heading`, `--card`, `--tile`, `--on-accent`, `--on-inverse`, `--about-bg`, and so on) and `--text`, `--muted`, `--accent`, `--border`, `--page`, `--surface`, `--band` and `--link`. The fixed tokens (`--ink`, `--on-dark`, `--accent-on-dark`, `--about-heading`) keep one value in both modes: use them only in role definitions and in the About section, which is dark in both modes. A new color use needs a token with a light value and a dark value, or it breaks dark mode.
-- Link-like classes that must not turn link-hover brown (buttons, nav links, brand, footer email) list their own `:hover` state.
+- Link-like classes that must not turn link-hover brown (buttons, nav links, brand, footer email, footer links) list their own `:hover` state.
 - Transitions use `var(--ease)` and lifts use `var(--lift)`. Animate only color, background-color, border-color, box-shadow, transform and text-decoration-color. Hard-coded durations or transforms ignore reduced motion.
-- Use `:focus-visible` for focus rings, never `:focus`. Never remove outlines.
+- Use `:focus-visible` for focus rings, never `:focus`. Never remove outlines. The one `:focus` rule, `.skip-link:focus`, is not a focus ring: it moves the skip link into view.
 - Write fluid sizes in this exact form so they hit the end points exactly: `clamp(min, min + (max - min) * (100vw - 390px) / 890, max)`.
 - Keep text contrast at WCAG AA (4.5:1) and touch targets at least 44px.
 - Never hide nav links. The two long nav links hold `<span class="nav-long">` and `<span class="nav-short">`, and only one of the two is displayed at a time, so each link's accessible name is its visible text. Do not add an `aria-label` unless it starts with the visible text (WCAG 2.5.3). Keep each label as one span; splitting it around a nested span breaks the current-page underline.
-- The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row. The footer's LinkedIn link, next to "Privacy", is what phones get on every page, so keep it.
+- The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row. The footer's LinkedIn link, next to "Privacy", is what phones get on every page, so keep it. The two footer links sit in one `.footer-links` span, so on a narrow screen they move to a second line together: keep the span.
 - Short nav links reach the 44px touch target through the `.nav-link::before` overlay, which widens the tap area without changing the spacing. Keep it.
 - The numbered steps are `ol` lists and the home page tiles are a `ul`, styled to show no numbers or bullets. Keep the `list-style-type: ""` that follows `list-style: none`, and keep `aria-hidden="true"` on the visible step numbers, since the list already gives the order.
 - On the home page the two step lists sit side by side and share their rows (`.how-pair`, CSS subgrid), so step 01 lines up with step 01. The rule allows four steps per column: a fifth step needs one more row there.
 - On the FAQ and privacy pages the text column is 760px wide and starts at the page title's left edge. Do not center it.
 - Dark mode is automatic (`prefers-color-scheme`), with no toggle and no script. It is screen-only, so print stays light.
 - Scroll fade-ins live only inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`. Never animate the hero text.
-- The hero graphic is SVG SMIL on one shared clock. Do not move its dots to CSS animation, because the two clocks drift. Any new SVG animation must also be hidden under `prefers-reduced-motion: reduce`, since SMIL ignores it.
+- The hero graphic is SVG SMIL on one shared clock. Do not move its dots to CSS animation, because the two clocks drift. If the animation ever moves to CSS, move all of it together (the dots, the rings and their opacity), so it still runs on one clock. Any new SVG animation must also be hidden under `prefers-reduced-motion: reduce`, since SMIL ignores it.
 - Print styles must keep working: no nav, buttons or graphic, FAQ answers expanded, and cards, FAQ items and steps not split across pages.
 
 Copy
