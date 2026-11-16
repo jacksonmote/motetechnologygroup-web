@@ -331,6 +331,16 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-cols); }
 @media (max-width: 640px) { .steps { grid-template-columns: minmax(0, 1fr); } }
 .step-list { display: flex; flex-direction: column; gap: 32px; }
+/* Home page, two step lists side by side: step 01 lines up with step 01, 02 with 02, and so on,
+   however the text wraps. Both columns share five rows: the label, then up to four steps. */
+@supports (grid-template-rows: subgrid) {
+  @media screen and (min-width: 641px) {
+    .how-pair { grid-template-rows: repeat(5, auto); row-gap: 0; }
+    .how-pair > div, .how-pair .step-list { display: grid; grid-template-rows: subgrid; }
+    .how-pair > div { grid-row: span 5; }
+    .how-pair .step-list { grid-row: span 4; }
+  }
+}
 .step-num { margin: 0 0 8px; font-family: var(--font-heading); font-weight: 700; font-size: 40px; color: var(--accent); line-height: 1; }
 .step-title { margin: 0 0 8px; font-family: var(--font-heading); font-size: var(--step-h3); }
 .step-text { margin: 0; color: var(--text); }

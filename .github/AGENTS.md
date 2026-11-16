@@ -43,6 +43,7 @@ Styling
 - The header's LinkedIn button is not a nav link. It is hidden below 700px on purpose, because there it wraps onto a third header row.
 - Short nav links reach the 44px touch target through the `.nav-link::before` overlay, which widens the tap area without changing the spacing. Keep it.
 - The numbered steps are `ol` lists and the home page tiles are a `ul`, styled to show no numbers or bullets. Keep the `list-style-type: ""` that follows `list-style: none`, and keep `aria-hidden="true"` on the visible step numbers, since the list already gives the order.
+- On the home page the two step lists sit side by side and share their rows (`.how-pair`, CSS subgrid), so step 01 lines up with step 01. The rule allows four steps per column: a fifth step needs one more row there.
 - On the FAQ and privacy pages the text column is 760px wide and starts at the page title's left edge. Do not center it.
 - Dark mode is automatic (`prefers-color-scheme`), with no toggle and no script. It is screen-only, so print stays light.
 - Scroll fade-ins live only inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`. Never animate the hero text.
