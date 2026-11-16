@@ -22,7 +22,7 @@ See [AGENTS.md](AGENTS.md) for how to work on the site and the rules that must n
 
 ## Security
 
-Report issues to hello@motetechnologygroup.com. See [security.txt](https://motetechnologygroup.com/.well-known/security.txt).
+Report issues to security@motetechnologygroup.com. See [security.txt](https://motetechnologygroup.com/.well-known/security.txt).
 
 ## Privacy
 
