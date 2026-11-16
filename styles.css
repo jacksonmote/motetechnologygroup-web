@@ -359,7 +359,8 @@ ul.tp { padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 
 /* FAQ */
 .faq-list { padding: 72px var(--gutter) var(--space-section); display: flex; flex-direction: column; gap: 56px; }
-.faq-group { width: 100%; max-width: 760px; }
+/* scroll-margin: links from the service pages land on a group (/faq/#home-services) with room above its title */
+.faq-group { width: 100%; max-width: 760px; scroll-margin-top: 24px; }
 .faq-group-title { margin: 0 0 20px; font-family: var(--font-heading); font-size: var(--step-h2-faq); letter-spacing: -0.02em; line-height: 1.15; }
 .faq { display: flex; flex-direction: column; gap: 12px; }
 .faq details {
