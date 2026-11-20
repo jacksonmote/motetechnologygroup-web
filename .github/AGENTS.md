@@ -36,7 +36,7 @@ Pages
 Styling
 - Take colors from tokens that dark mode remaps: the role tokens (`--heading`, `--card`, `--tile`, `--on-accent`, `--on-inverse`, `--about-bg`, and so on) and `--text`, `--muted`, `--accent`, `--border`, `--page`, `--surface`, `--band` and `--link`. The fixed tokens (`--ink`, `--on-dark`, `--accent-on-dark`, `--about-heading`) keep one value in both modes: use them only in role definitions and in the About section, which is dark in both modes. A new color use needs a token with a light value and a dark value, or it breaks dark mode.
 - Link-like classes that must not turn link-hover brown (buttons, nav links, brand, footer email, footer links) list their own `:hover` state.
-- Transitions use `var(--ease)` and lifts use `var(--lift)`. Animate only color, background-color, border-color, box-shadow, transform and text-decoration-color. Hard-coded durations or transforms ignore reduced motion.
+- Transitions use `var(--ease)` and lifts use `var(--lift)`. Transitions animate only color, background-color, border-color, box-shadow, transform and text-decoration-color. Hard-coded durations or transforms ignore reduced motion. The only keyframe animations are the scroll fade-ins and the hero graphic, below.
 - Use `:focus-visible` for focus rings, never `:focus`. Never remove outlines. The one `:focus` rule, `.skip-link:focus`, is not a focus ring: it moves the skip link into view.
 - Write fluid sizes in this exact form so they hit the end points exactly: `clamp(min, min + (max - min) * (100vw - 390px) / 890, max)`.
 - Keep text contrast at WCAG AA (4.5:1) and touch targets at least 44px.
@@ -48,7 +48,7 @@ Styling
 - On the FAQ and privacy pages the text column is 760px wide and starts at the page title's left edge. Do not center it.
 - Dark mode is automatic (`prefers-color-scheme`), with no toggle and no script. It is screen-only, so print stays light.
 - Scroll fade-ins live only inside `@supports (animation-timeline: view())` and `prefers-reduced-motion: no-preference`. Never animate the hero text.
-- The hero graphic is SVG SMIL on one shared clock. Do not move its dots to CSS animation, because the two clocks drift. If the animation ever moves to CSS, move all of it together (the dots, the rings and their opacity), so it still runs on one clock. Any new SVG animation must also be hidden under `prefers-reduced-motion: reduce`, since SMIL ignores it.
+- The whole hero graphic animation lives in CSS keyframes in `styles.css`, on one timeline: every dot and ring uses the same 14.4s duration, linear timing and infinite repeat, and they differ only by a fixed delay (`--net-at`). Change the timing only for all of it together. No part of it may be moved back to SVG animation elements (`<animate>`, `<animateMotion>`) on its own: the two clocks would drift, and Firefox applies the Content Security Policy to SVG animation of CSS properties such as `opacity`, so those parts never show there. The keyframes run only under `prefers-reduced-motion: no-preference`, and under `reduce` the dots and rings are hidden, leaving the still network.
 - Print styles must keep working: no nav, buttons or graphic, FAQ answers expanded, and cards, FAQ items and steps not split across pages.
 
 Copy
