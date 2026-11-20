@@ -231,10 +231,43 @@ main > .section-white:last-child { border-bottom: 0; } /* the footer draws that 
 .net-hub { fill: var(--accent); }
 /* Hero motion (one 14.4s cycle, three 4.8s slots, one dot moving at a time): an inbound dot
    travels to the hub, a ring fades out around it, then an outbound dot leaves along another
-   edge and a ring pulses around its node. All SVG animation (SMIL) so the timings share one clock;
-   all of it is hidden for reduced motion. */
+   edge and a ring pulses around its node. All of it is CSS keyframes on one clock: the same
+   14.4s duration, linear timing and infinite repeat for every element, which differ only by a
+   fixed delay (--net-at). Each element stays at its opacity="0" until its delay has passed.
+   Dots move along straight edges, from --net-from to --net-to in SVG units. Change the timing
+   only for all of it together. With reduced motion none of it runs or shows. */
 .net-pulses { fill: var(--accent); }
 .net-glows, .net-react-group { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.net-dot-1 { --net-at: 0s; --net-from: 268px, 70px; --net-to: 160px, 150px; }
+.net-dot-2 { --net-at: 2s; --net-from: 160px, 150px; --net-to: 122px, 262px; }
+.net-dot-3 { --net-at: 4.8s; --net-from: 92px, 126px; --net-to: 160px, 150px; }
+.net-dot-4 { --net-at: 6.8s; --net-from: 160px, 150px; --net-to: 150px, 30px; }
+.net-dot-5 { --net-at: 9.6s; --net-from: 238px, 256px; --net-to: 160px, 150px; }
+.net-dot-6 { --net-at: 11.6s; --net-from: 160px, 150px; --net-to: 268px, 70px; }
+.net-glow-1 { --net-at: 1.8s; }
+.net-glow-2 { --net-at: 6.6s; }
+.net-glow-3 { --net-at: 11.4s; }
+.net-react-sw { --net-at: 3.8s; }
+.net-react-n { --net-at: 8.6s; }
+.net-react-ne { --net-at: 13.4s; }
+@keyframes net-dot {
+  0% { opacity: 0; transform: translate(var(--net-from)); }
+  0.694%, 11.111% { opacity: 1; }
+  12.5%, 100% { opacity: 0; transform: translate(var(--net-to)); }
+}
+@keyframes net-glow {
+  0% { opacity: 0.35; r: 14px; }
+  9.722%, 100% { opacity: 0; r: 30px; }
+}
+@keyframes net-react {
+  0% { opacity: 0.8; r: 7px; }
+  6.944%, 100% { opacity: 0; r: 13px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .net-dot { animation: net-dot 14.4s linear var(--net-at) infinite; }
+  .net-glow { animation: net-glow 14.4s linear var(--net-at) infinite; }
+  .net-react { animation: net-react 14.4s linear var(--net-at) infinite; }
+}
 @media (prefers-reduced-motion: reduce) { .net-pulses, .net-glows, .net-react-group { display: none; } }
 @media (max-width: 999px) {
   .hero-net { flex: 0 0 240px; }
