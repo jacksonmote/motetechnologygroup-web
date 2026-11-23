@@ -431,26 +431,36 @@ def check_tool_versions():
     return out
 
 
+def is_linkedin(url):
+    host = (urllib.parse.urlparse(url).hostname or "").lower()
+    return host == "linkedin.com" or host.endswith(".linkedin.com")
+
+
 def check_external_links():
+    """Each unique outside URL gets exactly one GET per run, however many pages link it.
+
+    One request, no retry: the footer puts the LinkedIn link on every page, and a
+    second request to a rate-limited site only makes the limit more likely.
+    LinkedIn answers automated requests with 999 or 429, so both pass for it; a
+    429 from any other host still warns.
+    """
     link = re.compile(r'<a\b[^>]*?\bhref="(https://[^"]+)"', re.I)
     urls = set()
     for path in PAGES:
         for u in link.findall(page(path)[1]):
-            u = html.unescape(u)
+            u = urllib.parse.urldefrag(html.unescape(u)).url
             if urllib.parse.urlparse(u).hostname not in (HOST, WWW_HOST):
                 urls.add(u)
     out = []
     for u in sorted(urls):
         name = "Link: " + u
         try:
-            status, _, _ = http(u, method="HEAD")
-            if status >= 400:
-                status, _, _ = http(u)
+            status, _, _ = http(u)
         except OSError as err:
             out.append((name, WARN, f"Could not connect: {getattr(err, 'reason', err)}"))
             continue
-        if status == 999 and "linkedin.com" in u:
-            out.append((name, PASS, "LinkedIn returns 999 to bots (expected)"))
+        if status in (429, 999) and is_linkedin(u):
+            out.append((name, PASS, f"Returned {status}: LinkedIn blocks automated checks (expected)"))
         elif status < 400:
             out.append((name, PASS, f"Returned {status}"))
         else:
